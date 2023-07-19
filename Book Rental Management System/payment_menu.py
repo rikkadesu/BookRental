@@ -60,17 +60,50 @@ class PaymentInterface:
         db = sqlite3.connect("BOOK RENTAL.db")
         script = db.cursor()
 
+        self.insert_renter(script)  # Calls a method that inserts the renter's contact information
+        self.insert_payment(script)  # Calls a method that inserts the renter's payment information
+        self.insert_schedule(script)  # Calls a method that inserts the transaction information in the schedule
+
+        db.commit()
+        script.close()
+        db.close()
+
+        # This is just for debugging purposes, you can remove this block
+        print("===========  Renter  ===========")
+        print(f"Last Name: {self.info.get('Last Name')}")
+        print(f"First Name: {self.info.get('First Name')}")
+        print(f"Middle Initial: {self.info.get('Middle Initial')}")
+        print(f"Phone: {self.info.get('Phone')}")
+        print(f"Email: {self.info.get('Email')}")
+        print("================================")
+        print()
+        print("==========  Payment  ===========")
+        print(f"Payment Method:\t{self.selected_method.get()}")  # Placeholder, testing
+        print(f"Payment Amount:\t{self.amount_entry.get()}")  # Placeholder, testing
+        print("================================")
+        print("Done!")  # Placeholder, testing
+        # You can remove up to here
+
+        self.payment_window.destroy()  # Closes the payment window as the transaction is complete
+        self.parent_window.destroy()  # Closes the parent window as the transaction is complete
+
+    def cancel(self):
+        self.payment_window.destroy()
+
+    def insert_renter(self, script):
         # This part is responsible for inserting records into the Renter Table
         insertToRenter_query = '''INSERT INTO Renter ( Last_Name, First_Name, Middle_Initial, Phone_Number, Email )
-                                  VALUES ( ?, ?, ?, ?, ?)'''
+                                          VALUES ( ?, ?, ?, ?, ?)'''
         renter_values = (self.info.get('Last Name'), self.info.get('First Name'), self.info.get('Middle Initial'),
                          self.info.get('Phone'), self.info.get('Email'))
         script.execute(insertToRenter_query, renter_values)
         # Up to here -- Renter Table
 
+    def insert_payment(self, script):
         # This part is responsible for inserting records into the Payment Table
         current_date = self.take_currentDate()
         latest_date = self.take_latestDateFromDB(script, self.parent.get_bookID())
+        print(f"Latest Date: {latest_date}")
         payment_mode, payment_amount = self.take_paymentMethod()
 
         insertToPayment_query = '''INSERT INTO Payment ( Payment_Amount, Payment_Date, Payment_Mode )
@@ -79,27 +112,50 @@ class PaymentInterface:
         script.execute(insertToPayment_query, payment_values)
         # Up to here -- Payment Table
 
-        db.commit()
-        script.close()
-        db.close()
+    def insert_schedule(self, script):
+        # This code block takes the latest Payment ID
+        sql_query = '''SELECT Payment_ID FROM Payment ORDER BY Payment_ID DESC LIMIT 1'''
+        script.execute(sql_query)
+        payment_result = script.fetchone()
+        payment_id = payment_result[0] if payment_result is not None else None
+        print(f"Payment ID: {payment_id}")
+        # Up to here -- Payment ID
 
-        # This is just for debugging purposes, you can remove this block
-        print(f"Last Name: {self.info.get('Last Name')}")
-        print(f"First Name: {self.info.get('First Name')}")
-        print(f"Middle Initial: {self.info.get('Middle Initial')}")
-        print(f"Phone: {self.info.get('Phone')}")
-        print(f"Email: {self.info.get('Email')}")
-        print(f"Payment Method:\t{self.selected_method.get()}")  # Placeholder, testing
-        print(f"Payment Amount:\t{self.amount_entry.get()}")  # Placeholder, testing
-        print("Done!")  # Placeholder, testing
-        # You can remove up to here
+        # This code block takes the latest Renter ID
+        sql_query = '''SELECT Renter_ID FROM Renter ORDER BY Renter_ID DESC LIMIT 1'''
+        script.execute(sql_query)
+        renter_result = script.fetchone()
+        renter_id = renter_result[0] if renter_result is not None else None
+        print(f"Renter ID: {renter_id}")
+        # Up to here -- Renter ID
 
-        self.payment_window.destroy()
-        self.parent_window.destroy()
+        # This code block takes the latest Book ID
+        book_id = self.parent.get_bookID()
+        print(f"Book ID: {book_id}")
+        # Up to here -- Book ID
 
-    def cancel(self):
-        self.payment_window.destroy()
+        # This code block takes the Admin ID of the responsible for this system
+        # >>> Input the code here later
+        # Up to here -- Admin ID
 
+        # This code block takes the necessary date information for the transaction
+        rent_date = self.take_currentDate()
+        latest_date = self.take_latestDateFromDB(script, self.parent.get_bookID())
+        if latest_date is not None:
+            return_date = self.compute_newDate(latest_date)
+        else:
+            return_date = self.compute_newDate(rent_date)
+        # Up to here -- Transaction Dates
+
+        # This code block will perform the insertion of the data taken
+        insertToSchedule_query = '''INSERT INTO Schedule ( Payment_ID, Renter_ID, Book_ID, Employee_ID, Rent_Date,
+                                    Return_Date, isCompleted)
+                                           VALUES ( ?, ?, ?, ?, ?, ?, ? )'''
+        schedule_values = (payment_id, renter_id, book_id, "Unknown", rent_date, return_date, 0)
+        script.execute(insertToSchedule_query, schedule_values)
+        # Up to here -- Insertion to Schedule Table
+
+    # Helper methods below
     def take_paymentMethod(self):
         if self.selected_method != "Select a method":
             return self.selected_method.get(), self.amount_entry.get()
@@ -121,8 +177,11 @@ class PaymentInterface:
 
     @staticmethod
     def compute_newDate(date_str):
-        new_date_obj = datetime.strptime(date_str, '%Y-%m-%d')
-        new_date = new_date_obj + timedelta(days=9)
+        new_date_obj = datetime.strptime(date_str, '%Y-%m-%d') if date_str is not None else None
+        if new_date_obj is not None:
+            new_date = new_date_obj + timedelta(days=9)
+        else:
+            new_date = date_str + timedelta(days=9)
         return new_date.strftime('%Y-%m-%d')
 
 
