@@ -87,6 +87,7 @@ class RentBookInterface:
         isFirstNameValid = checker.is_validName(self.firstname_entry.get(), 2)
         isPhoneValid = checker.is_validPhone(self.phone_entry.get())
         isEmailValid = checker.is_validEmail(self.email_entry.get())
+
         if isLastNameValid and isFirstNameValid:
             last_name = self.lastname_entry.get()
             first_name = self.firstname_entry.get()

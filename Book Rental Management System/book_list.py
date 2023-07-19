@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import sqlite3
 
 
 class BookListInterface:
@@ -38,9 +39,7 @@ class BookListInterface:
         self.schedules.column("AUTHOR", width=395, anchor=CENTER)
         for name in names:
             self.schedules.heading(name, text=name)  # This adds the text of the headings
-        for i in range(100, 10001):
-            self.schedules.insert("", "end", text=str(i), values=("Random Book Name " + str(i),
-                                                                  "Random Name " + str(i)))  # Sample Items Only
+        self.fetch_and_process_records()
         self.schedules.place(x=5, y=150)
         # ==========  Table  ==========
 
@@ -58,6 +57,38 @@ class BookListInterface:
             self.parent.get_books(item_values)
             print(item_values[0])
         self.bookList_window.destroy()
+
+    def fetch_and_process_records(self):
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
+
+        # Execute the SELECT statement to retrieve records
+        script.execute("SELECT * FROM Book")
+
+        # Process and add records to the Treeview
+        for record in script.fetchall():
+            processed_record = self.process_record(record, script)
+            self.schedules.insert("", "end", text=record[0], values=processed_record)
+
+        # Close the database connection
+        script.close()
+        db.close()
+
+    def process_record(self, record, script: sqlite3.Cursor):
+        # This method transforms the data taken into a tuple designed for the Treeview
+        processed_record = (record[1], self.get_authorName(record[2], script))
+        return processed_record
+
+    @staticmethod
+    def get_authorName(author_id, script):
+        sql_query = '''SELECT Author_Name FROM Author WHERE Author_ID = ? 
+                                   ORDER BY Author_ID DESC LIMIT 1'''
+        script.execute(sql_query, (author_id,))
+        result = script.fetchone()
+        if result is not None:
+            return result[0]
+        else:
+            return None
 
 
 def main():

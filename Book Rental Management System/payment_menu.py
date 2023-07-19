@@ -68,21 +68,7 @@ class PaymentInterface:
         script.close()
         db.close()
 
-        # This is just for debugging purposes, you can remove this block
-        print("===========  Renter  ===========")
-        print(f"Last Name: {self.info.get('Last Name')}")
-        print(f"First Name: {self.info.get('First Name')}")
-        print(f"Middle Initial: {self.info.get('Middle Initial')}")
-        print(f"Phone: {self.info.get('Phone')}")
-        print(f"Email: {self.info.get('Email')}")
-        print("================================")
-        print()
-        print("==========  Payment  ===========")
-        print(f"Payment Method:\t{self.selected_method.get()}")  # Placeholder, testing
-        print(f"Payment Amount:\t{self.amount_entry.get()}")  # Placeholder, testing
-        print("================================")
-        print("Done!")  # Placeholder, testing
-        # You can remove up to here
+        print("Transaction Done.")  # Sign in the console that transaction is successful
 
         self.payment_window.destroy()  # Closes the payment window as the transaction is complete
         self.parent_window.destroy()  # Closes the parent window as the transaction is complete
@@ -102,8 +88,6 @@ class PaymentInterface:
     def insert_payment(self, script):
         # This part is responsible for inserting records into the Payment Table
         current_date = self.take_currentDate()
-        latest_date = self.take_latestDateFromDB(script, self.parent.get_bookID())
-        print(f"Latest Date: {latest_date}")
         payment_mode, payment_amount = self.take_paymentMethod()
 
         insertToPayment_query = '''INSERT INTO Payment ( Payment_Amount, Payment_Date, Payment_Mode )
