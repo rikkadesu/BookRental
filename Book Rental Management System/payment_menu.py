@@ -118,7 +118,7 @@ class PaymentInterface:
         script.execute(sql_query)
         payment_result = script.fetchone()
         payment_id = payment_result[0] if payment_result is not None else None
-        print(f"Payment ID: {payment_id}")
+        # print(f"Payment ID: {payment_id}")
         # Up to here -- Payment ID
 
         # This code block takes the latest Renter ID
@@ -126,12 +126,12 @@ class PaymentInterface:
         script.execute(sql_query)
         renter_result = script.fetchone()
         renter_id = renter_result[0] if renter_result is not None else None
-        print(f"Renter ID: {renter_id}")
+        # print(f"Renter ID: {renter_id}")
         # Up to here -- Renter ID
 
         # This code block takes the latest Book ID
         book_id = self.parent.get_bookID()
-        print(f"Book ID: {book_id}")
+        # print(f"Book ID: {book_id}")
         # Up to here -- Book ID
 
         # This code block takes the Admin ID of the responsible for this system

@@ -5,12 +5,11 @@ import checker
 
 
 class ReturnBookInterface:
-    def __init__(self, parent):
+    def __init__(self, parent_window):
         self.middleinitial_entry = self.firstname_entry = self.lastname_entry = None
         self.book_entry = self.name_entry = None
 
-        self.parent = parent
-        self.return_window = Toplevel(parent)
+        self.return_window = Toplevel(parent_window)
         self.return_window.title("Return A Book - Book Rental Mangement System")
         self.return_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========

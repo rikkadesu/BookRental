@@ -69,9 +69,8 @@ class BookRentalSystem:
     def remove_book():
         remove_menu.RemoveBookInterface()
 
-    @staticmethod
-    def see_sched():
-        schedule_menu.ScheduleInterface()
+    def see_sched(self):
+        schedule_menu.ScheduleInterface(self.main_window)
 
     @staticmethod
     def init_db():

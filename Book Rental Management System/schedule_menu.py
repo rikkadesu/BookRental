@@ -1,17 +1,17 @@
 from tkinter import *
 from tkinter import ttk
+import sqlite3
 
 import return_menu
 
 
 class ScheduleInterface:
-    def __init__(self):
-        self.selected_method = None
-        self.method_dropdown = None
-        self.amount_entry = None
+    def __init__(self, parent_window):
+        self.schedules = self.selected_method = None
+        self.method_dropdown = self.amount_entry = None
 
-        self.schedule_window = Tk()
-        self.schedule_window.title("Add A Book - Book Rental Mangement System")
+        self.schedule_window = Toplevel(parent_window)
+        self.schedule_window.title("Schedules - Book Rental Mangement System")
         self.schedule_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========
         screen_width = self.schedule_window.winfo_screenwidth()
@@ -33,33 +33,83 @@ class ScheduleInterface:
         main_header.place(x=140, y=50)
 
         # ==========  Table  ==========
-        schedules = ttk.Treeview(self.schedule_window, height=21)
-        schedules["columns"] = ("TRANSACTION ID", "BOOK ID", "BOOK NAME", "RENTER NAME", "RENT DATE", "RETURN DATE")
-        schedules.column("#0", width=0, stretch=NO)  # This is the default column being hidden
-        schedules.heading("#0", text="")             # Sets the name of the default column to blank to hide it
+        self.schedules = ttk.Treeview(self.schedule_window, height=21)
+        self.schedules["columns"] = ("TRANSACTION ID", "BOOK ID", "BOOK NAME", "RENTER NAME", "RENT DATE",
+                                     "RETURN DATE")
+        self.schedules.column("#0", width=0, stretch=NO)  # This is the default column being hidden
+        self.schedules.heading("#0", text="")             # Sets the name of the default column to blank to hide it
         names = ["TRANSACTION ID", "BOOK ID", "BOOK NAME", "RENTER NAME", "RENT DATE", "RETURN DATE"]
-        schedules.column("TRANSACTION ID", width=110, anchor=CENTER)
-        schedules.column("BOOK ID", width=110, anchor=CENTER)
-        schedules.column("BOOK NAME", width=275, anchor=CENTER)
-        schedules.column("RENTER NAME", width=275, anchor=CENTER)
-        schedules.column("RENT DATE", width=110, anchor=CENTER)
-        schedules.column("RETURN DATE", width=110, anchor=CENTER)
+        self.schedules.column("TRANSACTION ID", width=110, anchor=CENTER)
+        self.schedules.column("BOOK ID", width=110, anchor=CENTER)
+        self.schedules.column("BOOK NAME", width=275, anchor=CENTER)
+        self.schedules.column("RENTER NAME", width=275, anchor=CENTER)
+        self.schedules.column("RENT DATE", width=110, anchor=CENTER)
+        self.schedules.column("RETURN DATE", width=110, anchor=CENTER)
         for name in names:
-            schedules.heading(name, text=name)  # This adds the text of the headings
+            self.schedules.heading(name, text=name)  # This adds the text of the headings
         # for i in range(100, 10001):
-        #     schedules.insert("", "end", text="1", values=(i, str(i)+str(i), "Random Book Name "+str(i),
+        #     self.schedules.insert("", "end", text="1", values=(i, str(i)+str(i), "Random Book Name "+str(i),
         #                                                   "Random Name "+str(1), i, i))  # Sample Items Only
-        schedules.place(x=5, y=150)
+        self.fetch_and_process_records()
+        self.schedules.place(x=5, y=150)
         # ==========  Table  ==========
 
         # Button
         return_button = Button(self.schedule_window, text="RETURN A BOOK", font=("Segoe UI", 12, "bold"), width=14)
-        return_button.configure(command=lambda: return_menu.ReturnBookInterface())
+        return_button.configure(command=lambda: return_menu.ReturnBookInterface(self.schedule_window))
         return_button.place(x=800, y=52)
+
+    # Helper methods starts below
+    @staticmethod
+    def get_renterName(renter_id, script):
+        sql_query = '''SELECT Last_Name, First_Name, Middle_Initial FROM Renter WHERE Renter_ID = ? 
+                           ORDER BY Renter_ID DESC LIMIT 1'''
+        script.execute(sql_query, (renter_id,))
+        result = script.fetchone()
+        if result is not None:
+            name = f"{result[0]}, {result[1]} "
+            if result[2] is not None:
+                name += f"{result[2]}."
+            return name
+        else:
+            return None
+
+    @staticmethod
+    def get_bookName(book_id, script: sqlite3.Cursor):
+        sql_query = '''SELECT Book_Name FROM Book WHERE Book_ID == ? 
+                                   ORDER BY Book_ID DESC LIMIT 1'''
+        script.execute(sql_query, (book_id,))
+        result = script.fetchone()
+        if result is not None:
+            return result[0]
+        else:
+            return None
+
+    def fetch_and_process_records(self):
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
+
+        # Execute the SELECT statement to retrieve records
+        script.execute("SELECT * FROM Schedule")
+
+        # Process and add records to the Treeview
+        for record in script.fetchall():
+            processed_record = self.process_record(record, script)
+            self.schedules.insert("", "end", values=processed_record)
+
+        # Close the database connection
+        script.close()
+        db.close()
+
+    def process_record(self, record, script: sqlite3.Cursor):
+        # This method transforms the data taken into a tuple designed for the Treeview
+        processed_record = (record[0], record[3], self.get_bookName(record[3], script), self.get_renterName(record[2],
+                            script), record[5], record[6])
+        return processed_record
 
 
 def main():
-    ScheduleInterface()
+    ScheduleInterface(None)
 
 
 if __name__ == "__main__":
