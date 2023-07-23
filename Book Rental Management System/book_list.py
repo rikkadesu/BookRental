@@ -55,7 +55,10 @@ class BookListInterface:
             item_values = item_values['values']
             item_values.insert(0, item_text)
             self.parent.get_books(item_values)
-            print(item_values[0])
+            self.parent.book_entry.configure(state="normal")
+            self.parent.book_entry.delete(0, END)
+            self.parent.book_entry.insert(END, self.parent.selected_books[1])
+            self.parent.book_entry.configure(state="readonly")
         self.bookList_window.destroy()
 
     def fetch_and_process_records(self):

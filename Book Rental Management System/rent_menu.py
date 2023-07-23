@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 import book_list
 import checker
@@ -111,9 +112,11 @@ class RentBookInterface:
                 }
                 payment_menu.PaymentInterface(self, self.rent_window, info)
             else:
-                print("At least one of the two is needed to proceed: Phone Number or Email")
+                messagebox.showwarning("Fields Required", "At least one of the two is needed to proceed: Phone Number "
+                                       "or Email", parent=self.rent_window)
         else:
-            print("First and Last Name should have at least two characters.")
+            messagebox.showwarning("Fields Required", "First and Last Name should have at least two characters.",
+                                   parent=self.rent_window)
         # Up to here -- checking necessary information
 
     def cancel(self):
@@ -124,11 +127,11 @@ class RentBookInterface:
 
     def get_books(self, selected_list):
         self.selected_books = selected_list
-        print(self.selected_books)
+        # print(self.selected_books)
 
     def get_bookID(self):
         self.selected_bookID = self.selected_books[0]
-        print(self.selected_bookID)
+        # print(self.selected_bookID)
         return self.selected_bookID
 
 

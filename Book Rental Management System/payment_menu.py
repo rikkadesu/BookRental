@@ -60,6 +60,7 @@ class PaymentInterface:
         db = sqlite3.connect("BOOK RENTAL.db")
         script = db.cursor()
 
+        # self.is_renterExisting(script)
         self.insert_renter(script)  # Calls a method that inserts the renter's contact information
         self.insert_payment(script)  # Calls a method that inserts the renter's payment information
         self.insert_schedule(script)  # Calls a method that inserts the transaction information in the schedule
@@ -76,10 +77,32 @@ class PaymentInterface:
     def cancel(self):
         self.payment_window.destroy()
 
+    # def is_renterExisting(self, script: sqlite3.Cursor):
+    #     sql_query = '''select Renter_ID from Renter
+    #                    where First_Name = ? AND Last_Name = ? AND IFNULL(Middle_Initial, " ") = ? AND
+    #                    IFNULL(Phone_Number, 0) = ? AND IFNULL(Email," ") = ?'''
+    #
+    #     last_name = self.info.get('Last Name') if self.info.get('Last Name') is not None else " "
+    #     first_name = self.info.get('First Name') if self.info.get('First Name') is not None else " "
+    #     middle_initial = self.info.get('Middle Initial') if self.info.get('Middle Initial') is not None else " "
+    #     phone_number = self.info.get('Phone') if self.info.get('Phone') is not None else 0
+    #     email = self.info.get('Email') if self.info.get('Email') is not None else " "
+    #     print(f"{last_name} {first_name} {middle_initial} {phone_number} {email}")
+    #
+    #     query_values = (first_name, last_name, middle_initial, phone_number, email)
+    #     script.execute(sql_query, query_values)
+    #     renter = script.fetchone()
+    #     if renter is not None:
+    #         print(str(renter))
+    #         # renter_id = renter[0]
+    #         # print(f"Renter_ID: {renter_id}")
+    #     else:
+    #         print("No existing data found.")
+
     def insert_renter(self, script):
         # This part is responsible for inserting records into the Renter Table
-        insertToRenter_query = '''INSERT INTO Renter ( Last_Name, First_Name, Middle_Initial, Phone_Number, Email )
-                                          VALUES ( ?, ?, ?, ?, ?)'''
+        insertToRenter_query = '''INSERT INTO Renter ( Last_Name, First_Name, Middle_Initial, Phone_Number, 
+                                  Email ) VALUES ( ?, ?, ?, ?, ?)'''
         renter_values = (self.info.get('Last Name'), self.info.get('First Name'), self.info.get('Middle Initial'),
                          self.info.get('Phone'), self.info.get('Email'))
         script.execute(insertToRenter_query, renter_values)
@@ -119,7 +142,7 @@ class PaymentInterface:
         # Up to here -- Book ID
 
         # This code block takes the Admin ID of the responsible for this system
-        # >>> Input the code here later
+        # >>> Input the code here later OKAAAAAAYYYYY?????
         # Up to here -- Admin ID
 
         # This code block takes the necessary date information for the transaction
@@ -132,9 +155,8 @@ class PaymentInterface:
         # Up to here -- Transaction Dates
 
         # This code block will perform the insertion of the data taken
-        insertToSchedule_query = '''INSERT INTO Schedule ( Payment_ID, Renter_ID, Book_ID, Employee_ID, Rent_Date,
-                                    Return_Date, isCompleted)
-                                           VALUES ( ?, ?, ?, ?, ?, ?, ? )'''
+        insertToSchedule_query = '''INSERT INTO Schedule ( Payment_ID, Renter_ID, Book_ID, Employee_ID, 
+                                    Rent_Date, Return_Date, isCompleted) VALUES ( ?, ?, ?, ?, ?, ?, ? )'''
         schedule_values = (payment_id, renter_id, book_id, "Unknown", rent_date, return_date, 0)
         script.execute(insertToSchedule_query, schedule_values)
         # Up to here -- Insertion to Schedule Table
@@ -151,7 +173,8 @@ class PaymentInterface:
 
     @staticmethod
     def take_latestDateFromDB(script, book_id):
-        sql_query = '''SELECT Return_Date FROM Schedule WHERE Book_ID == ? ORDER BY Transaction_ID DESC LIMIT 1'''
+        sql_query = '''SELECT Return_Date FROM Schedule WHERE Book_ID == ? AND isCompleted == 0
+                       ORDER BY Transaction_ID DESC LIMIT 1'''
         script.execute(sql_query, (book_id,))
         result = script.fetchone()
         if result is not None:
