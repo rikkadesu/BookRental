@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import sqlite3
 
+import editRenter_menu
 import return_menu
 
 
@@ -57,9 +58,13 @@ class ScheduleInterface:
         bookFilter_button.configure(command=self.do_filter)
         bookFilter_button.place(x=930, y=122)
 
-        self.clearFilter_button = Button(self.schedule_window, text="Refresh", font=("Segoe UI", 9, "bold"), width=12)
+        self.clearFilter_button = Button(self.schedule_window, text="Refresh", font=("Segoe UI", 9, "bold"), width=10)
         self.clearFilter_button.configure(command=self.clear_filter)
         self.clearFilter_button.place(x=5, y=122)
+
+        edit_button = Button(self.schedule_window, text="Edit", font=("Segoe UI", 9, "bold"), width=3)
+        edit_button.configure(command=self.edit_renter)
+        edit_button.place(x=90, y=122)
 
         # ==========  Table  ==========
         self.schedules = ttk.Treeview(self.schedule_window, height=21)
@@ -76,9 +81,6 @@ class ScheduleInterface:
         self.schedules.column("RETURN DATE", width=110, anchor=CENTER)
         for name in names:
             self.schedules.heading(name, text=name)  # This adds the text of the headings
-        # for i in range(100, 10001):
-        #     self.schedules.insert("", "end", text="1", values=(i, str(i)+str(i), "Random Book Name "+str(i),
-        #                                                   "Random Name "+str(1), i, i))  # Sample Items Only
         self.fetch_and_process_records()
         self.schedules.place(x=5, y=150)
         # ==========  Table  ==========
@@ -252,6 +254,13 @@ class ScheduleInterface:
         self.middleinitial_entry.delete(0, END)
         self.firstname_entry.delete(0, END)
         self.fetch_and_process_records()
+
+    def edit_renter(self):
+        item = self.schedules.selection()
+        if item:
+            values = self.schedules.item(item)['values']
+            print(values)
+            editRenter_menu.EditRenterInterface(self.schedule_window, values)
 
 
 def main():

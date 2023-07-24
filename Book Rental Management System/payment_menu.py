@@ -77,28 +77,6 @@ class PaymentInterface:
     def cancel(self):
         self.payment_window.destroy()
 
-    # def is_renterExisting(self, script: sqlite3.Cursor):
-    #     sql_query = '''select Renter_ID from Renter
-    #                    where First_Name = ? AND Last_Name = ? AND IFNULL(Middle_Initial, " ") = ? AND
-    #                    IFNULL(Phone_Number, 0) = ? AND IFNULL(Email," ") = ?'''
-    #
-    #     last_name = self.info.get('Last Name') if self.info.get('Last Name') is not None else " "
-    #     first_name = self.info.get('First Name') if self.info.get('First Name') is not None else " "
-    #     middle_initial = self.info.get('Middle Initial') if self.info.get('Middle Initial') is not None else " "
-    #     phone_number = self.info.get('Phone') if self.info.get('Phone') is not None else 0
-    #     email = self.info.get('Email') if self.info.get('Email') is not None else " "
-    #     print(f"{last_name} {first_name} {middle_initial} {phone_number} {email}")
-    #
-    #     query_values = (first_name, last_name, middle_initial, phone_number, email)
-    #     script.execute(sql_query, query_values)
-    #     renter = script.fetchone()
-    #     if renter is not None:
-    #         print(str(renter))
-    #         # renter_id = renter[0]
-    #         # print(f"Renter_ID: {renter_id}")
-    #     else:
-    #         print("No existing data found.")
-
     def insert_renter(self, script):
         # This part is responsible for inserting records into the Renter Table
         insertToRenter_query = '''INSERT INTO Renter ( Last_Name, First_Name, Middle_Initial, Phone_Number, 

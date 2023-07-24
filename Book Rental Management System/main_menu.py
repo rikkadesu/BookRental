@@ -81,7 +81,7 @@ class BookRentalSystem:
                            Renter_ID INTEGER PRIMARY KEY AUTOINCREMENT
                          , Last_Name TEXT, First_Name TEXT
                          , Middle_Initial TEXT
-                         , Phone_Number INTEGER, Email TEXT
+                         , Phone_Number TEXT, Email TEXT
                         )''')
         script.execute('''CREATE TABLE IF NOT EXISTS Author(
                            Author_ID INTEGER PRIMARY KEY AUTOINCREMENT
