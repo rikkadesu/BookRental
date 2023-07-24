@@ -1,12 +1,15 @@
-import sqlite3
 from tkinter import *
+from tkinter import messagebox
+import sqlite3
 
 import checker
+import schedule_menu
 
 
 class ReturnBookInterface:
     def __init__(self, parent_window):
         self.middleinitial_entry = self.firstname_entry = self.lastname_entry = None
+        self.last_name = self.first_name = self.middle_initial = self.book_id = None
         self.book_entry = self.name_entry = None
 
         self.return_window = Toplevel(parent_window)
@@ -63,31 +66,87 @@ class ReturnBookInterface:
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
+        self.first_name = self.firstname_entry.get() if checker.is_validName(self.firstname_entry.get(), 2) else None
+        self.last_name = self.lastname_entry.get() if checker.is_validName(self.lastname_entry.get(), 2) else None
+        self.middle_initial = self.middleinitial_entry.get() if self.middleinitial_entry.get() != "" else None
+        self.book_id = self.book_entry.get() if self.book_entry.get() != "" else None
 
-
-
-
-        db.commit()
-        script.close()
-        db.close()
-        self.return_window.destroy()
+        if self.first_name is not None and self.last_name is not None and self.book_id is not None:
+            if self.isTransactionExisting():
+                self.remove_record()
+                messagebox.showwarning("Return Successful", "Book Returned Successfully.", parent=self.return_window)
+                db.commit()
+                script.close()
+                db.close()
+                self.return_window.destroy()
+            else:
+                messagebox.showwarning("Return Failed", "No existing record found from the given details.",
+                                       parent=self.return_window)
+                db.commit()
+                script.close()
+                db.close()
+        elif (self.first_name is not None or self.last_name is not None) and self.book_id is None:
+            messagebox.showinfo("Details Required", "Please enter required details: Book ID.",
+                                parent=self.return_window)
+        elif (self.first_name is None or self.last_name is None) and self.book_id is not None:
+            messagebox.showinfo("Details Required", "Please enter required details: First and Last Name.",
+                                parent=self.return_window)
+        else:
+            messagebox.showinfo("Details Required", "Please enter required details: First and Last Name, Book ID.",
+                                parent=self.return_window)
 
     def cancel(self):
         self.return_window.destroy()
 
-    @staticmethod
-    def modify_renter(renter_values, script):
-        renter_query = '''UPDATE Renter
-                          SET hasReturned = 1
-                          WHERE Last_Name == ? AND First_Name == ? AND Middle_Initial is ?'''
-        script.execute(renter_query, renter_values)
+    def isTransactionExisting(self):
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
 
-    @staticmethod
-    def modify_book(book_id, script):
-        book_query = '''UPDATE Book
-                        SET isReturned = 1
-                        WHERE Book_ID IS ?'''
-        script.execute(book_query, (book_id,))
+        renter_ids = schedule_menu.ScheduleInterface.query_renterID(self.last_name, self.first_name, self.middle_initial)
+
+        sql_query = '''SELECT * FROM Schedule WHERE Renter_ID = ? AND Book_ID = ?
+                       ORDER BY Transaction_ID'''
+
+        fetched = None
+        for renter_id in renter_ids:
+            query_values = (renter_id[0], self.book_id)
+            script.execute(sql_query, query_values)
+            fetched = script.fetchone()
+            if fetched is not None:
+                break
+
+        db.commit()
+        script.close()
+        db.close()
+        return True if fetched is not None else False
+
+    def remove_record(self):
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
+
+        renter_ids = schedule_menu.ScheduleInterface.query_renterID(self.last_name, self.first_name, self.middle_initial)
+
+        sql_query = '''SELECT Renter_ID FROM Schedule WHERE Renter_ID = ? AND Book_ID = ? ORDER BY Transaction_ID'''
+        fetched = None
+        for renter_id in renter_ids:
+            query_values = (renter_id[0], self.book_id)
+            script.execute(sql_query, query_values)
+            fetched = script.fetchone()
+            if fetched is not None:
+                break
+
+        sql_query = '''UPDATE Schedule SET isCompleted = 1
+                       WHERE Renter_ID = ? AND Book_ID = ? AND isCompleted = 0'''
+
+        print("Renter_ID: ", fetched[0])
+        print("Book_ID: ", self.book_id)
+
+        query_values = (fetched[0], self.book_id)
+        script.execute(sql_query, query_values)
+
+        db.commit()
+        script.close()
+        db.close()
 
 
 def main():

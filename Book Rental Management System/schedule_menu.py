@@ -227,7 +227,7 @@ class ScheduleInterface:
         db.commit()
         script.close()
         db.close()
-        return renter_ids  # Fetches all the id from the result (RENTER)
+        return renter_ids  # Fetches all the id from the result (RENTER) and return a list of tuples
 
     @staticmethod
     def query_bookID(book_name):
@@ -242,7 +242,7 @@ class ScheduleInterface:
         db.commit()
         script.close()
         db.close()
-        return book_ids  # Fetches all the id from the result (BOOK)
+        return book_ids  # Fetches all the id from the result (BOOK) and return a list of tuples
 
     def clear_filter(self):
         self.bookFilter_entry.delete(0, END)
