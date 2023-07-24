@@ -63,25 +63,14 @@ class ReturnBookInterface:
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
-        last_name = first_name = middle_initial = book_id = None
-        isLastNameValid = checker.is_validName(self.lastname_entry.get(), 2)
-        isFirstNameValid = checker.is_validName(self.firstname_entry.get(), 2)
-        isNumberValid = self.book_entry.get().isnumeric()
-        if isLastNameValid and isFirstNameValid:
-            last_name = self.lastname_entry.get()
-            first_name = self.firstname_entry.get()
-            if self.middleinitial_entry.get() != "":
-                middle_initial = self.middleinitial_entry.get()
-        if isNumberValid:
-            book_id = int(self.book_entry.get())
-        renter_values = (last_name, first_name, middle_initial)
-        if isLastNameValid and isFirstNameValid and isNumberValid:
-            self.modify_renter(renter_values, script)
-            self.modify_book(book_id, script)
-            db.commit()
-            script.close()
-            db.close()
-            self.return_window.destroy()
+
+
+
+
+        db.commit()
+        script.close()
+        db.close()
+        self.return_window.destroy()
 
     def cancel(self):
         self.return_window.destroy()

@@ -151,16 +151,37 @@ class ScheduleInterface:
         script = db.cursor()
 
         renter_ids = self.query_renterID(renter_ln, renter_fn, renter_mi)
+        book_ids = self.query_bookID(book_name) if book_name is not None else None
 
         # Process to delete current list and update with requested data
         self.schedules.delete(*self.schedules.get_children())
-        filter_query = '''SELECT Transaction_ID, Book_ID, Renter_ID, Rent_Date, Return_Date
-                          FROM Schedule WHERE isCompleted = 0 AND Renter_ID = ?'''
-        for renter_id in renter_ids:
-            script.execute(filter_query, tuple(renter_id,))
-            for record in script.fetchall():
-                processed_record = self.process_record(record, script)
-                self.schedules.insert("", "end", values=processed_record)
+        if len(renter_ids) != 0 and book_ids is None:  # If only the renter name is entered
+            filter_query = '''SELECT Transaction_ID, Book_ID, Renter_ID, Rent_Date, Return_Date
+                              FROM Schedule WHERE isCompleted = 0 AND Renter_ID = ?'''
+            for renter_id in renter_ids:
+                script.execute(filter_query, tuple(renter_id,))
+                for record in script.fetchall():
+                    processed_record = self.process_record(record, script)
+                    self.schedules.insert("", "end", values=processed_record)
+        elif len(renter_ids) != 0 and book_ids is not None:  # If both renter name and book name is entered
+            filter_query = '''SELECT Transaction_ID, Book_ID, Renter_ID, Rent_Date, Return_Date
+                              FROM Schedule WHERE isCompleted = 0 AND Renter_ID = ? AND Book_ID = ?'''
+            for book_id in book_ids:
+                for renter_id in renter_ids:
+                    filter_values = (renter_id[0], book_id[0])
+                    script.execute(filter_query, filter_values)
+                    for record in script.fetchall():
+                        processed_record = self.process_record(record, script)
+                        self.schedules.insert("", "end", values=processed_record)
+        elif len(renter_ids) == 0 and book_ids is not None:  # If only the book name is entered
+            filter_query = '''SELECT Transaction_ID, Book_ID, Renter_ID, Rent_Date, Return_Date
+                              FROM Schedule WHERE isCompleted = 0 AND Book_ID = ?'''
+            for book_id in book_ids:
+                filter_values = (book_id[0],)
+                script.execute(filter_query, filter_values)
+                for record in script.fetchall():
+                    processed_record = self.process_record(record, script)
+                    self.schedules.insert("", "end", values=processed_record)
 
         db.commit()
         script.close()
@@ -171,34 +192,32 @@ class ScheduleInterface:
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
-        # Using only ln, ln + mi, ln + fn + mi
-        if renter_ln is not None and renter_mi is None:
-            if renter_fn is not None and renter_mi is None:
+        if renter_ln is not None and renter_mi is None:  # Checks if renter last name is entered without middle initial
+            if renter_fn is not None and renter_mi is None:  # Checks if renter first name is also entered without middle initial
                 sql_query = '''SELECT Renter_ID FROM Renter
                                WHERE Last_Name LIKE ? || '%' COLLATE NOCASE
                                AND First_Name LIKE ? || '%' COLLATE NOCASE;'''
                 script.execute(sql_query, (renter_ln, renter_fn))
-            elif renter_fn is not None and renter_mi is not None:
+            elif renter_fn is not None and renter_mi is not None:  # Else if renter first name is entered with middle initial
                 sql_query = '''SELECT Renter_ID FROM Renter
                                WHERE Last_Name LIKE ? || '%' COLLATE NOCASE
                                AND First_Name LIKE ? || '%' COLLATE NOCASE
                                AND Middle_Initial LIKE ? || '%' COLLATE NOCASE;'''
                 script.execute(sql_query, (renter_ln, renter_fn, renter_mi))
-            else:
+            else:  # Else if only renter last name is entered
                 sql_query = '''SELECT Renter_ID FROM Renter
                                WHERE Last_Name LIKE ? || '%' COLLATE NOCASE;'''
                 script.execute(sql_query, (renter_ln,))
-        elif renter_ln is not None and renter_mi is not None:
+        elif renter_ln is not None and renter_mi is not None:  # Checks if renter last name and middle initial is entered
             sql_query = '''SELECT Renter_ID FROM Renter
                            WHERE Last_Name LIKE ? || '%' COLLATE NOCASE
                            AND Middle_Initial LIKE ? || '%' COLLATE NOCASE;'''
             script.execute(sql_query, (renter_ln, renter_mi))
-        # Using only fn, fn + mi
-        elif renter_ln is None and renter_fn is not None and renter_mi is None:
+        elif renter_ln is None and renter_fn is not None and renter_mi is None:  # Checks if only renter first name is entered
             sql_query = '''SELECT Renter_ID FROM Renter
                            WHERE First_Name LIKE ? || '%' COLLATE NOCASE;'''
             script.execute(sql_query, (renter_fn,))
-        elif renter_ln is None and renter_fn is not None and renter_mi is not None:
+        elif renter_ln is None and renter_fn is not None and renter_mi is not None:  # Checks if both renter first name and middle initial is entered
             sql_query = '''SELECT Renter_ID FROM Renter
                            WHERE First_Name LIKE ? || '%' COLLATE NOCASE
                            AND Middle_Initial LIKE ? || '%' COLLATE NOCASE;'''
@@ -208,10 +227,22 @@ class ScheduleInterface:
         db.commit()
         script.close()
         db.close()
-        return renter_ids  # Fetches all the id from the result
+        return renter_ids  # Fetches all the id from the result (RENTER)
 
-    def query_bookID(self):
-        pass
+    @staticmethod
+    def query_bookID(book_name):
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
+
+        sql_query = '''SELECT Book_ID FROM Book
+                       WHERE Book_Name LIKE '%' || ? || '%' COLLATE NOCASE;'''
+        script.execute(sql_query, (book_name,))
+        book_ids = script.fetchall()
+
+        db.commit()
+        script.close()
+        db.close()
+        return book_ids  # Fetches all the id from the result (BOOK)
 
     def clear_filter(self):
         self.bookFilter_entry.delete(0, END)
