@@ -7,7 +7,7 @@ import return_menu
 
 class ScheduleInterface:
     def __init__(self, parent_window):
-        self.middleinitial_entry = self.firstname_entry = self.lastname_entry = None
+        self.clearFilter_button = self.middleinitial_entry = self.firstname_entry = self.lastname_entry = None
         self.bookFilter_entry = self.schedules = self.selected_method = None
 
         self.schedule_window = Toplevel(parent_window)
@@ -57,9 +57,9 @@ class ScheduleInterface:
         bookFilter_button.configure(command=self.do_filter)
         bookFilter_button.place(x=930, y=122)
 
-        clearFilter_button = Button(self.schedule_window, text="Clear Filter", font=("Segoe UI", 9, "bold"), width=12)
-        clearFilter_button.configure(command=self.clear_filter)
-        clearFilter_button.place(x=5, y=122)
+        self.clearFilter_button = Button(self.schedule_window, text="Refresh", font=("Segoe UI", 9, "bold"), width=12)
+        self.clearFilter_button.configure(command=self.clear_filter)
+        self.clearFilter_button.place(x=5, y=122)
 
         # ==========  Table  ==========
         self.schedules = ttk.Treeview(self.schedule_window, height=21)
@@ -147,6 +147,7 @@ class ScheduleInterface:
         self.filter_specificRecord(renter_ln, renter_fn, renter_mi, book_name) if isValid else None
 
     def filter_specificRecord(self, renter_ln, renter_fn, renter_mi, book_name):
+        self.clearFilter_button.configure(text="Clear Filter")
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
@@ -245,6 +246,7 @@ class ScheduleInterface:
         return book_ids  # Fetches all the id from the result (BOOK) and return a list of tuples
 
     def clear_filter(self):
+        self.clearFilter_button.configure(text="Refresh")
         self.bookFilter_entry.delete(0, END)
         self.lastname_entry.delete(0, END)
         self.middleinitial_entry.delete(0, END)

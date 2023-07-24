@@ -74,7 +74,7 @@ class ReturnBookInterface:
         if self.first_name is not None and self.last_name is not None and self.book_id is not None:
             if self.isTransactionExisting():
                 self.remove_record()
-                messagebox.showwarning("Return Successful", "Book Returned Successfully.", parent=self.return_window)
+                messagebox.showinfo("Return Successful", "Book Returned Successfully.", parent=self.return_window)
                 db.commit()
                 script.close()
                 db.close()
@@ -86,14 +86,14 @@ class ReturnBookInterface:
                 script.close()
                 db.close()
         elif (self.first_name is not None or self.last_name is not None) and self.book_id is None:
-            messagebox.showinfo("Details Required", "Please enter required details: Book ID.",
-                                parent=self.return_window)
+            messagebox.showwarning("Details Required", "Please enter required details: Book ID.",
+                                   parent=self.return_window)
         elif (self.first_name is None or self.last_name is None) and self.book_id is not None:
-            messagebox.showinfo("Details Required", "Please enter required details: First and Last Name.",
-                                parent=self.return_window)
+            messagebox.showwarning("Details Required", "Please enter required details: First and Last Name.",
+                                   parent=self.return_window)
         else:
-            messagebox.showinfo("Details Required", "Please enter required details: First and Last Name, Book ID.",
-                                parent=self.return_window)
+            messagebox.showwarning("Details Required", "Please enter required details: First and Last Name, Book ID.",
+                                   parent=self.return_window)
 
     def cancel(self):
         self.return_window.destroy()
@@ -104,7 +104,7 @@ class ReturnBookInterface:
 
         renter_ids = schedule_menu.ScheduleInterface.query_renterID(self.last_name, self.first_name, self.middle_initial)
 
-        sql_query = '''SELECT * FROM Schedule WHERE Renter_ID = ? AND Book_ID = ?
+        sql_query = '''SELECT * FROM Schedule WHERE Renter_ID = ? AND Book_ID = ? AND isCompleted = 0
                        ORDER BY Transaction_ID'''
 
         fetched = None
@@ -137,9 +137,6 @@ class ReturnBookInterface:
 
         sql_query = '''UPDATE Schedule SET isCompleted = 1
                        WHERE Renter_ID = ? AND Book_ID = ? AND isCompleted = 0'''
-
-        print("Renter_ID: ", fetched[0])
-        print("Book_ID: ", self.book_id)
 
         query_values = (fetched[0], self.book_id)
         script.execute(sql_query, query_values)

@@ -104,7 +104,6 @@ class BookRentalSystem:
         script.execute('''CREATE TABLE IF NOT EXISTS Book (
                            Book_ID INTEGER PRIMARY KEY AUTOINCREMENT
                          , Book_Name VARCHAR(500), Author_ID TEXT
-                         , isReturned BOOL
                          , FOREIGN KEY (Author_ID) REFERENCES Author(Author_ID)
                         )''')
         script.execute('''CREATE TABLE IF NOT EXISTS Schedule (
