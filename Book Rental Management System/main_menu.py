@@ -61,13 +61,11 @@ class BookRentalSystem:
     def return_book(self):
         return_menu.ReturnBookInterface(self.main_window)
 
-    @staticmethod
-    def add_book():
-        add_menu.AddBookInterface()
+    def add_book(self):
+        add_menu.AddBookInterface(self.main_window)
 
-    @staticmethod
-    def remove_book():
-        remove_menu.RemoveBookInterface()
+    def remove_book(self):
+        remove_menu.RemoveBookInterface(self.main_window)
 
     def see_sched(self):
         schedule_menu.ScheduleInterface(self.main_window)
@@ -79,17 +77,17 @@ class BookRentalSystem:
 
         script.execute('''CREATE TABLE IF NOT EXISTS Renter (
                            Renter_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Last_Name TEXT, First_Name TEXT
+                         , Last_Name TEXT NOT NULL, First_Name TEXT
                          , Middle_Initial TEXT
                          , Phone_Number TEXT, Email TEXT
                         )''')
         script.execute('''CREATE TABLE IF NOT EXISTS Author(
                            Author_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Author_Name TEXT
+                         , Author_Name TEXT NOT NULL
                         )''')
         script.execute('''CREATE TABLE IF NOT EXISTS Admin (
                            Employee_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Last_Name TEXT, First_Name TEXT
+                         , Last_Name TEXT NOT NULL, First_Name TEXT
                          , Middle_Initial TEXT
                         )''')
         script.execute('''CREATE TABLE IF NOT EXISTS Payment (
@@ -103,7 +101,7 @@ class BookRentalSystem:
                         )''')
         script.execute('''CREATE TABLE IF NOT EXISTS Book (
                            Book_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Book_Name VARCHAR(500), Author_ID TEXT
+                         , Book_Name TEXT NOT NULL, Author_ID TEXT
                          , FOREIGN KEY (Author_ID) REFERENCES Author(Author_ID)
                         )''')
         script.execute('''CREATE TABLE IF NOT EXISTS Schedule (

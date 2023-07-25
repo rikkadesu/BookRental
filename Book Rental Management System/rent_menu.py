@@ -10,6 +10,7 @@ class RentBookInterface:
     def __init__(self, parent):
         self.book_entry = self.book_button = self.email_entry = self.phone_entry = None
         self.lastname_entry = self.firstname_entry = self.middleinitial_entry = None
+        self.book_number = 1
 
         self.selected_bookID = None
         self.selected_books = []
@@ -108,7 +109,8 @@ class RentBookInterface:
                     "First Name": first_name,
                     "Middle Initial": middle_initial,
                     "Phone": phone,
-                    "Email": email
+                    "Email": email,
+                    "Books": self.book_number
                 }
                 payment_menu.PaymentInterface(self, self.rent_window, info)
             else:

@@ -46,6 +46,8 @@ class PaymentInterface:
         amount_label = Label(self.payment_window, text="Payment Amount", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
         amount_label.place(x=220, y=310 - 15)
         self.amount_entry = Entry(self.payment_window, font=("Segoe UI", 12), width=40)
+        self.amount_entry.insert(0, str(200*self.info.get("Books")))
+        self.amount_entry.configure(state="readonly")
         self.amount_entry.place(x=220, y=340 - 15)
 
         save_button = Button(self.payment_window, text="SAVE", font=("Segoe UI", 12, "bold"), width=12)
@@ -121,6 +123,7 @@ class PaymentInterface:
 
         # This code block takes the Admin ID of the responsible for this system
         # >>> Input the code here later OKAAAAAAYYYYY?????
+        admin_id = 1  # Placeholder
         # Up to here -- Admin ID
 
         # This code block takes the necessary date information for the transaction
@@ -135,7 +138,7 @@ class PaymentInterface:
         # This code block will perform the insertion of the data taken
         insertToSchedule_query = '''INSERT INTO Schedule ( Payment_ID, Renter_ID, Book_ID, Employee_ID, 
                                     Rent_Date, Return_Date, isCompleted) VALUES ( ?, ?, ?, ?, ?, ?, ? )'''
-        schedule_values = (payment_id, renter_id, book_id, "Unknown", rent_date, return_date, 0)
+        schedule_values = (payment_id, renter_id, book_id, admin_id, rent_date, return_date, 0)
         script.execute(insertToSchedule_query, schedule_values)
         # Up to here -- Insertion to Schedule Table
 

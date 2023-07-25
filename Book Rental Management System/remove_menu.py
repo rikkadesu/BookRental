@@ -1,11 +1,15 @@
+import sqlite3
 from tkinter import *
+from tkinter import messagebox
+
+import checker
 
 
 class RemoveBookInterface:
-    def __init__(self):
+    def __init__(self, parent_window):
         self.book_entry = None
 
-        self.remove_window = Tk()
+        self.remove_window = Toplevel(parent_window)
         self.remove_window.title("Remove A Book - Book Rental Mangement System")
         self.remove_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========
@@ -41,15 +45,39 @@ class RemoveBookInterface:
         cancel_button.place(x=462, y=530)
 
     def save(self):
-        print(f"Book ID:\t{self.book_entry.get()}")  # Placeholder, testing
-        print("Done!")  # Placeholder, testing
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
+
+        book_id = self.book_entry.get() if self.book_entry.get() != "" else None
+        book_existing = self.isExisting(book_id, script)
+
+        if book_id and book_existing:
+            sql_query = '''DELETE FROM Book WHERE Book_ID = ?'''
+            script.execute(sql_query, (book_id,))
+            messagebox.showinfo("Success", "Book removed successfully", parent=self.remove_window)
+            self.remove_window.destroy()
+        elif book_id and not book_existing:
+            messagebox.showwarning("Failed", f"Book with the ID {book_id} is not existing.", parent=self.remove_window)
+        else:
+            messagebox.showwarning("Field Required", "This field is required: Book ID", parent=self.remove_window)
+
+        db.commit()
+        script.close()
+        db.close()
 
     def cancel(self):
         self.remove_window.destroy()
 
+    @staticmethod
+    def isExisting(book_id, script):
+        sql_query = '''SELECT Book_ID FROM Book WHERE Book_ID = ?'''
+        script.execute(sql_query, (book_id,))
+        fetched = script.fetchall()
+        return True if len(fetched) != 0 else False
+
 
 def main():
-    RemoveBookInterface()
+    RemoveBookInterface(None)
 
 
 if __name__ == "__main__":

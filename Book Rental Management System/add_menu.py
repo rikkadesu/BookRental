@@ -1,12 +1,15 @@
 from tkinter import *
+from tkinter import messagebox
+import sqlite3
+
+import checker
 
 
 class AddBookInterface:
-    def __init__(self):
-        self.book_entry = None
-        self.name_entry = None
+    def __init__(self, parent_window):
+        self.book_entry = self.name_entry = None
 
-        self.add_window = Tk()
+        self.add_window = Toplevel(parent_window)
         self.add_window.title("Add A Book - Book Rental Mangement System")
         self.add_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========
@@ -47,16 +50,63 @@ class AddBookInterface:
         cancel_button.place(x=462, y=530)
 
     def save(self):
-        print(f"Name:\t\t{self.name_entry.get()}")  # Placeholder, testing
-        print(f"Book ID:\t{self.book_entry.get()}")  # Placeholder, testing
-        print("Done!")  # Placeholder, testing
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
+
+        dummy = self.name_entry.get()
+        author_name = dummy if dummy != "" and checker.is_validName(dummy, 2) else None
+        dummy = self.book_entry.get()
+        book_name = dummy if checker.is_validName(dummy, 2) else None
+
+        author_id = self.get_authorID(author_name, script)
+
+        if author_id and book_name:
+            sql_query = '''INSERT INTO Book (Book_Name, Author_ID)
+                           VALUES (?, ?)'''
+            script.execute(sql_query, (book_name, author_id))
+            messagebox.showinfo("Success", "Book added successfully.", parent=self.add_window)
+            self.add_window.destroy()
+        elif author_id is None and author_name is not None and book_name:
+            self.add_authorID(author_name, script)
+            new_authorID = self.get_authorID(author_name, script)
+            sql_query = '''INSERT INTO Book (Book_Name, Author_ID)
+                           VALUES (?, ?)'''
+            script.execute(sql_query, (book_name, new_authorID))
+            messagebox.showinfo("Success", "Book added successfully.", parent=self.add_window)
+            self.add_window.destroy()
+        elif author_name is None and book_name:
+            messagebox.showwarning("Field Required", "This field is required: Author Name", parent=self.add_window)
+        elif author_name and book_name is None:
+            messagebox.showwarning("Field Required", "This field is required: Book Name", parent=self.add_window)
+        elif author_name is None and book_name is None:
+            messagebox.showwarning("Field Required", "These fields are required: Author Name, Book Name",
+                                   parent=self.add_window)
+
+        db.commit()
+        script.close()
+        db.close()
 
     def cancel(self):
         self.add_window.destroy()
 
+    @staticmethod
+    def get_authorID(author_name, script: sqlite3.Cursor):
+        sql_query = '''SELECT Author_ID FROM Author WHERE Author_Name = ?'''
+        script.execute(sql_query, (author_name, ))
+        author_id = script.fetchone()
+        if author_id is not None:
+            author_id = author_id[0]
+        return author_id
+
+    @staticmethod
+    def add_authorID(author_name, script):
+        sql_query = '''INSERT INTO Author (Author_Name)
+                       VALUES (?)'''
+        script.execute(sql_query, (author_name,))
+
 
 def main():
-    AddBookInterface()
+    AddBookInterface(None)
 
 
 if __name__ == "__main__":
