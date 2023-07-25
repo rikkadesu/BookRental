@@ -259,7 +259,6 @@ class ScheduleInterface:
         item = self.schedules.selection()
         if item:
             values = self.schedules.item(item)['values']
-            print(values)
             editRenter_menu.EditRenterInterface(self.schedule_window, values)
 
 

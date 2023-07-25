@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from datetime import date, datetime, timedelta
 import sqlite3
 
@@ -62,19 +63,20 @@ class PaymentInterface:
         db = sqlite3.connect("BOOK RENTAL.db")
         script = db.cursor()
 
-        # self.is_renterExisting(script)
-        self.insert_renter(script)  # Calls a method that inserts the renter's contact information
-        self.insert_payment(script)  # Calls a method that inserts the renter's payment information
-        self.insert_schedule(script)  # Calls a method that inserts the transaction information in the schedule
+        # These insert records in the database in their respective tables
+        if self.selected_method.get() != "Select a method":
+            self.insert_renter(script)  # Calls a method that inserts the renter's contact information
+            self.insert_payment(script)  # Calls a method that inserts the renter's payment information
+            self.insert_schedule(script)  # Calls a method that inserts the transaction information in the schedule
+            self.payment_window.destroy()  # Closes the payment window as the transaction is complete
+            self.parent_window.destroy()  # Closes the parent window as the transaction is complete
+            print("Transaction Done.")  # A prompt in the console that transaction is successful (unnecessary)
+        else:
+            messagebox.showwarning("Field Required", "Please select a payment mode.", parent=self.payment_window)
 
         db.commit()
         script.close()
         db.close()
-
-        print("Transaction Done.")  # Sign in the console that transaction is successful
-
-        self.payment_window.destroy()  # Closes the payment window as the transaction is complete
-        self.parent_window.destroy()  # Closes the parent window as the transaction is complete
 
     def cancel(self):
         self.payment_window.destroy()

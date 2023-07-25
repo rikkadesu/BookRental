@@ -89,6 +89,7 @@ class RentBookInterface:
         isFirstNameValid = checker.is_validName(self.firstname_entry.get(), 2)
         isPhoneValid = checker.is_validPhone(self.phone_entry.get())
         isEmailValid = checker.is_validEmail(self.email_entry.get())
+        hasSelectedBook = True if self.book_entry.get() != "None" else False
 
         if isLastNameValid and isFirstNameValid:
             last_name = self.lastname_entry.get()
@@ -104,15 +105,18 @@ class RentBookInterface:
         # This part checks if the necessary information were filled
         if isLastNameValid and isFirstNameValid:
             if (phone is not None and not phone == "") or (email is not None and not email == ""):
-                info = {
-                    "Last Name": last_name,
-                    "First Name": first_name,
-                    "Middle Initial": middle_initial,
-                    "Phone": phone,
-                    "Email": email,
-                    "Books": self.book_number
-                }
-                payment_menu.PaymentInterface(self, self.rent_window, info)
+                if hasSelectedBook:
+                    info = {
+                        "Last Name": last_name,
+                        "First Name": first_name,
+                        "Middle Initial": middle_initial,
+                        "Phone": phone,
+                        "Email": email,
+                        "Books": self.book_number
+                    }
+                    payment_menu.PaymentInterface(self, self.rent_window, info)
+                else:
+                    messagebox.showwarning("Fields Required", "Please select a book.", parent=self.rent_window)
             else:
                 messagebox.showwarning("Fields Required", "At least one of the two is needed to proceed: Phone Number "
                                        "or Email", parent=self.rent_window)

@@ -102,8 +102,6 @@ class EditRenterInterface:
         self.email_entry.delete(0, END)
         self.email_entry.insert(END, email)
 
-        print(renter_details)
-
         db.commit()
         script.close()
         db.close()
@@ -129,7 +127,6 @@ class EditRenterInterface:
             email = self.email_entry.get()
 
         self.renter_details = (last_name, first_name, middle_initial, phone, email, self.renter_id)
-        print("New: ", self.renter_details)
         # Up to here -- checking and taking information
 
         if isLastNameValid and isFirstNameValid:
