@@ -1,3 +1,4 @@
+import _tkinter
 from tkinter import *
 from tkinter import ttk
 import sqlite3
@@ -86,7 +87,7 @@ class ScheduleInterface:
 
         # Button
         return_button = Button(self.schedule_window, text="RETURN A BOOK", font=("Segoe UI", 12, "bold"), width=14)
-        return_button.configure(command=lambda: return_menu.ReturnBookInterface(self.schedule_window))
+        return_button.configure(command=self.return_book)
         return_button.place(x=800, y=42)
 
     # Helper methods starts below
@@ -252,12 +253,67 @@ class ScheduleInterface:
         self.fetch_and_process_records()
 
     def edit_renter(self):
-        item = self.schedules.selection()
-        if item:
-            values = self.schedules.item(item)['values']
-            editRenter_menu_window = editRenter_menu.EditRenterInterface(self.schedule_window, values)
-            editRenter_menu_window.editRenter_window.wait_window()
+        try:
+            item = self.schedules.selection()
+            if item:
+                values = self.schedules.item(item)['values']
+                editRenter_menu_window = editRenter_menu.EditRenterInterface(self.schedule_window, values)
+                editRenter_menu_window.editRenter_window.wait_window()
+                self.reset()
+        except _tkinter.TclError:
+            print("A table refresh call was called but the table was destroyed. Nothing to worry about though.")
+
+    def return_book(self):
+        try:
+            item = self.schedules.selection()
+            renter_info = None
+            if item:
+                values = self.schedules.item(item)['values']
+                renter_id = self.get_renterIDFromTransactionID(values[0])
+                renter_info = self.get_renterNameFromRenterID(renter_id)  # Indexes 0 1 2 (Last, First, Middle Name)
+                renter_info.append(values[1])  # Index 3 (Book ID)
+                renter_info.append(values[0])  # Index 4 (Transaction ID)
+            return_menu_window = return_menu.ReturnBookInterface(self.schedule_window, renter_info)
+            return_menu_window.return_window.wait_window()
             self.reset()
+        except _tkinter.TclError:
+            print("A table refresh call was called but the table was destroyed. Nothing to worry about though.")
+
+    @staticmethod
+    def get_renterNameFromRenterID(renter_id):
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
+
+        full_name = []
+        sql_query = '''SELECT Last_Name, First_Name, Middle_Initial FROM Renter WHERE Renter_ID = ?'''
+        script.execute(sql_query, (renter_id,))
+        renter_name = script.fetchone()
+        if renter_name:
+            for name in renter_name:
+                full_name.append(name if name is not None else "")
+
+        db.commit()
+        script.close()
+        db.close()
+        return list(renter_name)
+
+    @staticmethod
+    def get_renterIDFromTransactionID(transaction_id):
+        db = sqlite3.connect('BOOK RENTAL.db')
+        script = db.cursor()
+
+        sql_query = '''SELECT Renter_ID FROM Schedule WHERE Transaction_ID = ?'''
+        script.execute(sql_query, (transaction_id,))
+        renter_name = script.fetchone()
+        if renter_name:
+            renter_id = renter_name[0]
+        else:
+            renter_id = None
+
+        db.commit()
+        script.close()
+        db.close()
+        return renter_id
 
 
 def main():

@@ -60,7 +60,7 @@ class BookRentalSystem:
         rent_menu_window.rent_window.wait_window()
 
     def return_book(self):
-        return_menu_window = return_menu.ReturnBookInterface(self.main_window)
+        return_menu_window = return_menu.ReturnBookInterface(self.main_window, None)
         return_menu_window.return_window.wait_window()
 
     def add_book(self):

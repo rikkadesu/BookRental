@@ -3,12 +3,15 @@ from tkinter import *
 from tkinter import messagebox
 import sqlite3
 
+import _tkinter
+
 import checker
 import late_menu
 
 
 class ReturnBookInterface:
-    def __init__(self, parent_window):
+    def __init__(self, parent_window, initialize):
+        self.initialize = initialize
         self.middleinitial_entry = self.firstname_entry = self.lastname_entry = None
         self.last_name = self.first_name = self.middle_initial = self.book_id = None
         self.book_entry = self.name_entry = None
@@ -28,6 +31,7 @@ class ReturnBookInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.do_initialize() if self.initialize else None
 
     def set_interface(self):
         # Header
@@ -62,6 +66,16 @@ class ReturnBookInterface:
         cancel_button = Button(self.return_window, text="CANCEL", font=("Segoe UI", 12, "bold"), width=12)
         cancel_button.configure(command=self.cancel)
         cancel_button.place(x=462, y=530)
+
+    def do_initialize(self):
+        last_name = self.initialize[0]
+        first_name = self.initialize[1]
+        middle_initial = self.initialize[2] if self.initialize[2] is not None else ""
+        book_id = self.initialize[3]
+        self.lastname_entry.insert(0, last_name)
+        self.firstname_entry.insert(0, first_name)
+        self.middleinitial_entry.insert(0, middle_initial)
+        self.book_entry.insert(0, book_id)
 
     def save(self):
         self.first_name = self.firstname_entry.get() if checker.is_validName(self.firstname_entry.get(), 2) else None
@@ -111,34 +125,41 @@ class ReturnBookInterface:
 
     def take_earlyTransactionID(self, renter_id, script):
         transaction_id = None
-        sql_query = '''SELECT Transaction_ID FROM Schedule WHERE Renter_ID = ? AND Book_ID = ? ORDER BY Transaction_ID'''
-        query_values = (renter_id, self.book_id)
-        script.execute(sql_query, query_values)
-        fetched = script.fetchall()
-        if len(fetched) != 0:
-            transaction_id = fetched[0]
-            transaction_id = transaction_id[0]
+        if self.initialize:
+            transaction_id = self.initialize[4]
+        else:
+            sql_query = '''SELECT Transaction_ID FROM Schedule WHERE Renter_ID = ? AND Book_ID = ? AND isCompleted != 1 
+                           ORDER BY Transaction_ID'''
+            query_values = (renter_id, self.book_id)
+            script.execute(sql_query, query_values)
+            fetched = script.fetchall()
+            if len(fetched) != 0:
+                transaction_id = fetched[0]
+                transaction_id = transaction_id[0]
         return transaction_id
 
     def remove_record(self):
-        db = sqlite3.connect('BOOK RENTAL.db')
-        script = db.cursor()
+        try:
+            db = sqlite3.connect('BOOK RENTAL.db')
+            script = db.cursor()
 
-        renter_id = self.query_renterID(self.last_name, self.first_name, self.middle_initial)
-        transaction_id = self.take_earlyTransactionID(renter_id, script)
+            renter_id = self.query_renterID(self.last_name, self.first_name, self.middle_initial)
+            transaction_id = self.take_earlyTransactionID(renter_id, script)
 
-        self.check_isLate(script, transaction_id, renter_id)
+            self.check_isLate(script, transaction_id, renter_id)
 
-        if self.is_lateFeePaid:
-            sql_query = '''UPDATE Schedule SET isCompleted = 1 WHERE Transaction_ID = ? AND isCompleted = 0'''
-            query_values = (transaction_id,)
-            script.execute(sql_query, query_values)
-        else:
-            messagebox.showinfo("Cancelled", "Returning was cancelled.", parent=self.return_window)
+            if self.is_lateFeePaid:
+                sql_query = '''UPDATE Schedule SET isCompleted = 1 WHERE Transaction_ID = ? AND isCompleted = 0'''
+                query_values = (transaction_id,)
+                script.execute(sql_query, query_values)
+            else:
+                messagebox.showinfo("Cancelled", "Returning was cancelled.", parent=self.return_window)
 
-        db.commit()
-        script.close()
-        db.close()
+            db.commit()
+            script.close()
+            db.close()
+        except _tkinter.TclError:
+            print("A messagebox was called but the table was destroyed. Nothing to worry about though.")
 
     @staticmethod
     def query_renterID(renter_ln, renter_fn, renter_mi):
@@ -157,7 +178,7 @@ class ReturnBookInterface:
                 renter_id = renter_ids[0]
                 renter_id = renter_id[0]
         else:  # This part is when Middle Initial is not present
-            new_query = sql_query.replace("AND Middle_Initial = ? COLLATE NOCASE", "")
+            new_query = sql_query.replace("AND Middle_Initial = ? COLLATE NOCASE", "AND Middle_Initial IS NULL")
             script.execute(new_query, (renter_ln, renter_fn))
             renter_ids = script.fetchall()
             if len(renter_ids) != 0:
@@ -199,7 +220,7 @@ class ReturnBookInterface:
 
 def main():
     dummy = Tk()
-    ReturnBookInterface(dummy)
+    ReturnBookInterface(dummy, None)
     dummy.mainloop()
 
 
