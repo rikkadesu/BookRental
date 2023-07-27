@@ -7,6 +7,7 @@
     <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BOOK RENTAL.db" beforeDir="false" afterPath="$PROJECT_DIR$/BOOK RENTAL.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editRenter_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/editRenter_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment_menu.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -102,58 +102,55 @@ class PaymentInterface:
         email = self.info.get('Email')
         renter_id = None
 
+        sql_query = '''SELECT Renter_ID FROM Renter
+                       WHERE Last_Name = ? AND First_Name = ? AND Middle_Initial = ?
+                       AND Phone_Number = ? AND Email = ?'''
+
         if last_name and first_name is not None:
             if middle_initial is not None:
                 if phone is not None and email is None:
-                    sql_query = '''SELECT Renter_ID FROM Renter
-                                   WHERE Last_Name = ? AND First_Name = ? AND Middle_Initial = ?
-                                   AND Phone_Number = ? AND Email IS NULL'''
-                    script.execute(sql_query, (last_name, first_name, middle_initial, phone))
+                    new_query = sql_query.replace("AND Email = ?", "AND Email IS NULL")
+                    script.execute(new_query, (last_name, first_name, middle_initial, phone))
                     renter = script.fetchall()
                     if len(renter) != 0:
                         renter_id = renter[0]
+                        renter_id = renter_id[0]
                 elif phone is None and email is not None:
-                    sql_query = '''SELECT Renter_ID FROM Renter
-                                   WHERE Last_Name = ? AND First_Name = ? AND Middle_Initial = ?
-                                   AND Phone_Number IS NULL AND Email = ?'''
-                    script.execute(sql_query, (last_name, first_name, middle_initial, email))
+                    new_query = sql_query.replace("AND Phone_Number = ?", "AND Phone_Number IS NULL")
+                    script.execute(new_query, (last_name, first_name, middle_initial, email))
                     renter = script.fetchall()
                     if len(renter) != 0:
                         renter_id = renter[0]
+                        renter_id = renter_id[0]
                 elif phone is not None and email is not None:
-                    sql_query = '''SELECT Renter_ID FROM Renter
-                                   WHERE Last_Name = ? AND First_Name = ? AND Middle_Initial = ?
-                                   AND Phone_Number = ? AND Email = ?'''
                     script.execute(sql_query, (last_name, first_name, middle_initial, phone, email))
                     renter = script.fetchall()
                     if len(renter) != 0:
                         renter_id = renter[0]
+                        renter_id = renter_id[0]
             elif middle_initial is None:
+                new_query = sql_query.replace("AND Middle_Initial = ?", "AND Middle_Initial IS NULL")
                 if phone is not None and email is None:
-                    sql_query = '''SELECT Renter_ID FROM Renter
-                                   WHERE Last_Name = ? AND First_Name = ? AND Middle_Initial IS NULL
-                                   AND Phone_Number = ? AND Email IS NULL'''
-                    script.execute(sql_query, (last_name, first_name, phone))
+                    new_query = new_query.replace("AND Email = ?", "AND Email IS NULL")
+                    script.execute(new_query, (last_name, first_name, phone))
                     renter = script.fetchall()
                     if len(renter) != 0:
                         renter_id = renter[0]
+                        renter_id = renter_id[0]
                 elif phone is None and email is not None:
-                    sql_query = '''SELECT Renter_ID FROM Renter
-                                   WHERE Last_Name = ? AND First_Name = ? AND Middle_Initial IS NULL
-                                   AND Phone_Number IS NULL AND Email = ?'''
-                    script.execute(sql_query, (last_name, first_name, email))
+                    new_query = new_query.replace("AND Phone = ?", "AND Phone IS NULL")
+                    script.execute(new_query, (last_name, first_name, email))
                     renter = script.fetchall()
                     if len(renter) != 0:
                         renter_id = renter[0]
+                        renter_id = renter_id[0]
                 elif phone is not None and email is not None:
-                    sql_query = '''SELECT Renter_ID FROM Renter
-                                   WHERE Last_Name = ? AND First_Name = ? AND Middle_Initial IS NULL
-                                   AND Phone_Number = ? AND Email = ?'''
-                    script.execute(sql_query, (last_name, first_name, phone, email))
+                    script.execute(new_query, (last_name, first_name, phone, email))
                     renter = script.fetchall()
                     if len(renter) != 0:
                         renter_id = renter[0]
-        return renter_id[0]
+                        renter_id = renter_id[0]
+        return renter_id
 
     def insert_payment(self, script):
         # This part is responsible for inserting records into the Payment Table
