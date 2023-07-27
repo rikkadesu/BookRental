@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import messagebox
 import sqlite3
 
+import main_menu
+
 
 class LateFeeInterface:
     def __init__(self, details):
@@ -44,7 +46,7 @@ class LateFeeInterface:
         amount_label = Label(self.lateFee_window, text="Payment Amount", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
         amount_label.place(x=220, y=310 - 15)
         self.amount_entry = Entry(self.lateFee_window, font=("Segoe UI", 12), width=40)
-        self.amount_entry.insert(0, str(20*self.days_late))
+        self.amount_entry.insert(0, str(main_menu.BookRentalSystem.late_fee*self.days_late))
         self.amount_entry.configure(state="readonly")
         self.amount_entry.place(x=220, y=340 - 15)
 

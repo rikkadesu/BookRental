@@ -6,9 +6,13 @@ import remove_menu
 import rent_menu
 import return_menu
 import schedule_menu
+import settings_menu
 
 
 class BookRentalSystem:
+    rent_fee = 200
+    late_fee = 25
+
     def __init__(self, window):
         self.main_window = window
         self.main_window.title("Book Rental Mangement System")
@@ -55,6 +59,10 @@ class BookRentalSystem:
         sched_button.configure(command=self.see_sched)
         sched_button.place(x=140, y=490)
 
+        settings_button = Button(text="Settings", font=("Segoe UI", 9, "bold"), width=5, height=2)
+        settings_button.configure(command=self.settings)
+        settings_button.place(x=10, y=550)
+
     def rent_book(self):
         rent_menu_window = rent_menu.RentBookInterface(self.main_window)
         rent_menu_window.rent_window.wait_window()
@@ -75,6 +83,10 @@ class BookRentalSystem:
         schedule_menu_window = schedule_menu.ScheduleInterface(self.main_window)
         schedule_menu_window.schedule_window.wait_window()
 
+    def settings(self):
+        settings_menu_window = settings_menu.SettingsInterface(self.main_window)
+        settings_menu_window.settings_window.wait_window()
+
     @staticmethod
     def init_db():
         db = sqlite3.connect("BOOK RENTAL.db")
@@ -89,11 +101,6 @@ class BookRentalSystem:
         script.execute('''CREATE TABLE IF NOT EXISTS Author(
                            Author_ID INTEGER PRIMARY KEY AUTOINCREMENT
                          , Author_Name TEXT NOT NULL
-                        )''')
-        script.execute('''CREATE TABLE IF NOT EXISTS Admin (
-                           Employee_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Last_Name TEXT NOT NULL, First_Name TEXT
-                         , Middle_Initial TEXT
                         )''')
         script.execute('''CREATE TABLE IF NOT EXISTS Payment (
                            Payment_ID INTEGER PRIMARY KEY AUTOINCREMENT
@@ -112,13 +119,11 @@ class BookRentalSystem:
         script.execute('''CREATE TABLE IF NOT EXISTS Schedule (
                            Transaction_ID INTEGER PRIMARY KEY AUTOINCREMENT
                          , Payment_ID TEXT, Renter_ID TEXT
-                         , Book_ID TEXT, Employee_ID TEXT
-                         , Rent_Date TEXT, Return_Date TEXT
-                         , isCompleted BOOL
+                         , Book_ID TEXT, Rent_Date TEXT
+                         , Return_Date TEXT, isCompleted BOOL
                          , FOREIGN KEY (Payment_ID) REFERENCES Payment(Payment_ID)
                          , FOREIGN KEY (Renter_ID) REFERENCES Renter(Renter_ID)
                          , FOREIGN KEY (Book_ID) REFERENCES Book(Book_ID)
-                         , FOREIGN KEY (Employee_ID) REFERENCES Admin(Employee_ID)
                         )''')
         db.commit()
         script.close()
