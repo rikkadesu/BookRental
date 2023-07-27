@@ -56,19 +56,24 @@ class BookRentalSystem:
         sched_button.place(x=140, y=490)
 
     def rent_book(self):
-        rent_menu.RentBookInterface(self.main_window)
+        rent_menu_window = rent_menu.RentBookInterface(self.main_window)
+        rent_menu_window.rent_window.wait_window()
 
     def return_book(self):
-        return_menu.ReturnBookInterface(self.main_window)
+        return_menu_window = return_menu.ReturnBookInterface(self.main_window)
+        return_menu_window.return_window.wait_window()
 
     def add_book(self):
-        add_menu.AddBookInterface(self.main_window)
+        add_menu_window = add_menu.AddBookInterface(self.main_window)
+        add_menu_window.add_window.wait_window()
 
     def remove_book(self):
-        remove_menu.RemoveBookInterface(self.main_window)
+        remove_menu_window = remove_menu.RemoveBookInterface(self.main_window)
+        remove_menu_window.remove_window.wait_window()
 
     def see_sched(self):
-        schedule_menu.ScheduleInterface(self.main_window)
+        schedule_menu_window = schedule_menu.ScheduleInterface(self.main_window)
+        schedule_menu_window.schedule_window.wait_window()
 
     @staticmethod
     def init_db():

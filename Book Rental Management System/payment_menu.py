@@ -28,7 +28,6 @@ class PaymentInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
-        self.payment_window.mainloop()
 
     def set_interface(self):
         # Header
@@ -230,17 +229,15 @@ class PaymentInterface:
 
     @staticmethod
     def compute_newDate(date_str):
-        new_date_obj = datetime.strptime(date_str, '%Y-%m-%d') if date_str is not None else None
-        if new_date_obj is not None:
-            new_date = new_date_obj + timedelta(days=9)
-        else:
-            new_date = date_str + timedelta(days=9)
+        new_date_value = datetime.strptime(date_str, '%Y-%m-%d')
+        new_date = new_date_value + timedelta(days=9)
         return new_date.strftime('%Y-%m-%d')
 
 
 def main():
     dummy = Tk()
-    PaymentInterface(dummy, None, None)
+    info = {"Books": 1}
+    PaymentInterface(dummy, None, info)
 
 
 if __name__ == "__main__":

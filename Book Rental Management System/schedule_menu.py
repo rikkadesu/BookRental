@@ -8,7 +8,7 @@ import return_menu
 
 class ScheduleInterface:
     def __init__(self, parent_window):
-        self.clearFilter_button = self.middleinitial_entry = self.firstname_entry = self.lastname_entry = None
+        self.reset_button = self.middleinitial_entry = self.firstname_entry = self.lastname_entry = None
         self.bookFilter_entry = self.schedules = self.selected_method = None
 
         self.schedule_window = Toplevel(parent_window)
@@ -25,7 +25,6 @@ class ScheduleInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
-        self.schedule_window.mainloop()
 
     def set_interface(self):
         # Header
@@ -58,9 +57,9 @@ class ScheduleInterface:
         bookFilter_button.configure(command=self.do_filter)
         bookFilter_button.place(x=930, y=122)
 
-        self.clearFilter_button = Button(self.schedule_window, text="Refresh", font=("Segoe UI", 9, "bold"), width=10)
-        self.clearFilter_button.configure(command=self.clear_filter)
-        self.clearFilter_button.place(x=5, y=122)
+        self.reset_button = Button(self.schedule_window, text="Refresh", font=("Segoe UI", 9, "bold"), width=10)
+        self.reset_button.configure(command=self.reset)
+        self.reset_button.place(x=5, y=122)
 
         edit_button = Button(self.schedule_window, text="Edit", font=("Segoe UI", 9, "bold"), width=3)
         edit_button.configure(command=self.edit_renter)
@@ -149,7 +148,7 @@ class ScheduleInterface:
         self.filter_specificRecord(renter_ln, renter_fn, renter_mi, book_name) if isValid else None
 
     def filter_specificRecord(self, renter_ln, renter_fn, renter_mi, book_name):
-        self.clearFilter_button.configure(text="Clear Filter")
+        self.reset_button.configure(text="Clear Filter")
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
@@ -195,36 +194,33 @@ class ScheduleInterface:
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
+        sql_query = '''SELECT Renter_ID FROM Renter
+                       WHERE Last_Name LIKE ? || '%' COLLATE NOCASE
+                       AND First_Name LIKE ? || '%' COLLATE NOCASE
+                       AND Middle_Initial LIKE ? || '%' COLLATE NOCASE;'''
+
         if renter_ln is not None and renter_mi is None:  # Checks if renter last name is entered without middle initial
             if renter_fn is not None and renter_mi is None:  # Checks if renter first name is also entered without middle initial
-                sql_query = '''SELECT Renter_ID FROM Renter
-                               WHERE Last_Name LIKE ? || '%' COLLATE NOCASE
-                               AND First_Name LIKE ? || '%' COLLATE NOCASE;'''
-                script.execute(sql_query, (renter_ln, renter_fn))
+                new_query = sql_query.replace("AND Middle_Initial LIKE ? || '%' COLLATE NOCASE", "")
+                script.execute(new_query, (renter_ln, renter_fn))
             elif renter_fn is not None and renter_mi is not None:  # Else if renter first name is entered with middle initial
-                sql_query = '''SELECT Renter_ID FROM Renter
-                               WHERE Last_Name LIKE ? || '%' COLLATE NOCASE
-                               AND First_Name LIKE ? || '%' COLLATE NOCASE
-                               AND Middle_Initial LIKE ? || '%' COLLATE NOCASE;'''
                 script.execute(sql_query, (renter_ln, renter_fn, renter_mi))
             else:  # Else if only renter last name is entered
-                sql_query = '''SELECT Renter_ID FROM Renter
-                               WHERE Last_Name LIKE ? || '%' COLLATE NOCASE;'''
-                script.execute(sql_query, (renter_ln,))
+                new_query = sql_query.replace("AND Middle_Initial LIKE ? || '%' COLLATE NOCASE", "")
+                new_query = new_query.replace("AND First_Name LIKE ? || '%' COLLATE NOCASE", "")
+                script.execute(new_query, (renter_ln,))
         elif renter_ln is not None and renter_mi is not None:  # Checks if renter last name and middle initial is entered
-            sql_query = '''SELECT Renter_ID FROM Renter
-                           WHERE Last_Name LIKE ? || '%' COLLATE NOCASE
-                           AND Middle_Initial LIKE ? || '%' COLLATE NOCASE;'''
-            script.execute(sql_query, (renter_ln, renter_mi))
+            new_query = sql_query.replace("AND First_Name LIKE ? || '%' COLLATE NOCASE", "")
+            script.execute(new_query, (renter_ln, renter_mi))
         elif renter_ln is None and renter_fn is not None and renter_mi is None:  # Checks if only renter first name is entered
-            sql_query = '''SELECT Renter_ID FROM Renter
-                           WHERE First_Name LIKE ? || '%' COLLATE NOCASE;'''
-            script.execute(sql_query, (renter_fn,))
+            new_query = sql_query.replace('''Last_Name LIKE ? || '%' COLLATE NOCASE
+                       AND''', "")
+            new_query = new_query.replace("AND Middle_Initial LIKE ? || '%' COLLATE NOCASE", "")
+            script.execute(new_query, (renter_fn,))
         elif renter_ln is None and renter_fn is not None and renter_mi is not None:  # Checks if both renter first name and middle initial is entered
-            sql_query = '''SELECT Renter_ID FROM Renter
-                           WHERE First_Name LIKE ? || '%' COLLATE NOCASE
-                           AND Middle_Initial LIKE ? || '%' COLLATE NOCASE;'''
-            script.execute(sql_query, (renter_fn, renter_mi))
+            new_query = sql_query.replace('''Last_Name LIKE ? || '%' COLLATE NOCASE
+                                   AND''', "")
+            script.execute(new_query, (renter_fn, renter_mi))
         renter_ids = script.fetchall()
 
         db.commit()
@@ -247,8 +243,8 @@ class ScheduleInterface:
         db.close()
         return book_ids  # Fetches all the id from the result (BOOK) and return a list of tuples
 
-    def clear_filter(self):
-        self.clearFilter_button.configure(text="Refresh")
+    def reset(self):
+        self.reset_button.configure(text="Refresh")
         self.bookFilter_entry.delete(0, END)
         self.lastname_entry.delete(0, END)
         self.middleinitial_entry.delete(0, END)
@@ -259,7 +255,9 @@ class ScheduleInterface:
         item = self.schedules.selection()
         if item:
             values = self.schedules.item(item)['values']
-            editRenter_menu.EditRenterInterface(self.schedule_window, values)
+            editRenter_menu_window = editRenter_menu.EditRenterInterface(self.schedule_window, values)
+            editRenter_menu_window.editRenter_window.wait_window()
+            self.reset()
 
 
 def main():

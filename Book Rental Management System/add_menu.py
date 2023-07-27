@@ -23,7 +23,6 @@ class AddBookInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
-        self.add_window.mainloop()
 
     def set_interface(self):
         # Header
