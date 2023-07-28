@@ -67,7 +67,7 @@ class BookRentalSystem:
         rent_menu.RentBookInterface(self.main_window)
 
     def return_book(self):
-        return_menu.ReturnBookInterface(self.main_window)
+        return_menu.ReturnBookInterface(self.main_window, None)
 
     def add_book(self):
         add_menu.AddBookInterface(self.main_window)
@@ -111,7 +111,8 @@ class BookRentalSystem:
         # Late Fee Table
         script.execute('''CREATE TABLE IF NOT EXISTS LateFee (
                             LateFee_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                            Fee "[NVARCHAR]" (50) NOT NULL, Days_Late INTEGER
+                            Renter_ID INTEGER, Fee "[NVARCHAR]" (50) NOT NULL, Days_Late INTEGER,
+                            FOREIGN KEY (Renter_ID) REFERENCES Renter(Renter_ID)
                         )''')
         # Book Table
         script.execute('''CREATE TABLE IF NOT EXISTS Book (

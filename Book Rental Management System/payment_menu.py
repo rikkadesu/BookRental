@@ -30,7 +30,6 @@ class PaymentInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
-        self.payment_window.mainloop()
 
     def set_interface(self):
         # Header
@@ -71,9 +70,9 @@ class PaymentInterface:
             self.insert_renter(script)  # Calls a method that inserts the renter's contact information
             self.insert_payment(script)  # Calls a method that inserts the renter's payment information
             self.insert_schedule(script)  # Calls a method that inserts the transaction information in the schedule
+            messagebox.showinfo("Saved", "Transaction Done!", parent=self.payment_window)
             self.payment_window.destroy()  # Closes the payment window as the transaction is complete
             self.parent_window.destroy()  # Closes the parent window as the transaction is complete
-            print("Transaction Done.")  # A prompt in the console that transaction is successful (unnecessary)
         else:
             messagebox.showwarning("Field Required", "Please select a payment mode.", parent=self.payment_window)
 

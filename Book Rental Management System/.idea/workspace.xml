@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Book Rental Management System.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Book Rental Management System.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="Updated removal of admin table and optimized sorting of books">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BOOK RENTAL.db" beforeDir="false" afterPath="$PROJECT_DIR$/BOOK RENTAL.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/add_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/add_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/book_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/book_list.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/checker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/editRenter_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/editRenter_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment_menu.py" afterDir="false" />
@@ -21,7 +16,6 @@
       <change beforePath="$PROJECT_DIR$/rent_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/rent_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/return_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/return_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/schedule_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/schedule_menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings_menu.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +83,40 @@
       <option name="presentableId" value="Default" />
       <updated>1689761356047</updated>
     </task>
+    <task id="LOCAL-00001" summary="Updated removal of admin table and optimized sorting of books">
+      <created>1690513409741</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1690513409741</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated removal of admin table and optimized sorting of books" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated removal of admin table and optimized sorting of books" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/return_menu.py</url>
+          <line>175</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

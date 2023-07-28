@@ -30,7 +30,6 @@ class EditRenterInterface:
 
         self.set_interface()
         self.get_renterDetails()
-        self.editRenter_window.mainloop()
 
     def set_interface(self):
         # Header

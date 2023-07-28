@@ -22,7 +22,6 @@ class BookListInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
-        self.bookList_window.mainloop()
 
     def set_interface(self):
         # Header
