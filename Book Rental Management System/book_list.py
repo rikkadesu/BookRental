@@ -22,6 +22,7 @@ class BookListInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.bookList_window.mainloop()
 
     def set_interface(self):
         # Header
@@ -85,7 +86,8 @@ class BookListInterface:
         script = db.cursor()
 
         # Execute the SELECT statement to retrieve records
-        script.execute('''SELECT Book_ID, Book_Name, Author_ID FROM Book''')
+        script.execute('''SELECT Book_ID, Book_Name, Author_ID FROM Book
+                          ORDER BY Author_ID''')
         records = script.fetchall()
 
         # Process and add records to the Treeview
@@ -178,7 +180,7 @@ class BookListInterface:
     @staticmethod
     def get_authorName(author_id, script):
         sql_query = '''SELECT Author_Name FROM Author WHERE Author_ID = ? 
-                                   ORDER BY Author_ID DESC LIMIT 1'''
+                       ORDER BY Author_ID DESC LIMIT 1'''
         script.execute(sql_query, (author_id,))
         result = script.fetchone()
         if result is not None:

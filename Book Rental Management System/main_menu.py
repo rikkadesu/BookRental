@@ -64,24 +64,19 @@ class BookRentalSystem:
         settings_button.place(x=10, y=550)
 
     def rent_book(self):
-        rent_menu_window = rent_menu.RentBookInterface(self.main_window)
-        rent_menu_window.rent_window.wait_window()
+        rent_menu.RentBookInterface(self.main_window)
 
     def return_book(self):
-        return_menu_window = return_menu.ReturnBookInterface(self.main_window, None)
-        return_menu_window.return_window.wait_window()
+        return_menu.ReturnBookInterface(self.main_window)
 
     def add_book(self):
-        add_menu_window = add_menu.AddBookInterface(self.main_window)
-        add_menu_window.add_window.wait_window()
+        add_menu.AddBookInterface(self.main_window)
 
     def remove_book(self):
-        remove_menu_window = remove_menu.RemoveBookInterface(self.main_window)
-        remove_menu_window.remove_window.wait_window()
+        remove_menu.RemoveBookInterface(self.main_window)
 
     def see_sched(self):
-        schedule_menu_window = schedule_menu.ScheduleInterface(self.main_window)
-        schedule_menu_window.schedule_window.wait_window()
+        schedule_menu.ScheduleInterface(self.main_window)
 
     def settings(self):
         settings_menu_window = settings_menu.SettingsInterface(self.main_window)
@@ -92,38 +87,48 @@ class BookRentalSystem:
         db = sqlite3.connect("BOOK RENTAL.db")
         script = db.cursor()
 
+        # Renter Table
         script.execute('''CREATE TABLE IF NOT EXISTS Renter (
-                           Renter_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Last_Name TEXT NOT NULL, First_Name TEXT
-                         , Middle_Initial TEXT
-                         , Phone_Number TEXT, Email TEXT
+                            Renter_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                            Last_Name "[NVARCHAR]" (50) NOT NULL,
+                            First_Name "[NVARCHAR]" (50) NOT NULL,
+                            Middle_Initial "[NVARCHAR] (5)",
+                            Phone_Number "[NVARCHAR]" (13),
+                            Email "[NVARCHAR]" (100)
                         )''')
+        # Author Table
         script.execute('''CREATE TABLE IF NOT EXISTS Author(
-                           Author_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Author_Name TEXT NOT NULL
+                            Author_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                            Author_Name "[NVARCHAR]" (100) NOT NULL
                         )''')
+        # Payment Table
         script.execute('''CREATE TABLE IF NOT EXISTS Payment (
-                           Payment_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Payment_Amount INTEGER, Payment_Date TEXT
-                         , Payment_Mode TEXT
+                            Payment_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                            Payment_Amount "[NVARCHAR]" (50) NOT NULL,
+                            Payment_Date "[DATETIME]" NOT NULL,
+                            Payment_Mode "[NVARCHAR]" (50) NOT NULL
                         )''')
+        # Late Fee Table
         script.execute('''CREATE TABLE IF NOT EXISTS LateFee (
-                           LateFee_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Fee INTEGER, Days_Late INTEGER
+                            LateFee_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                            Fee "[NVARCHAR]" (50) NOT NULL, Days_Late INTEGER
                         )''')
+        # Book Table
         script.execute('''CREATE TABLE IF NOT EXISTS Book (
-                           Book_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Book_Name TEXT NOT NULL, Author_ID TEXT
-                         , FOREIGN KEY (Author_ID) REFERENCES Author(Author_ID)
+                           Book_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                           Book_Name "[NVARCHAR]" (50) NOT NULL,
+                           Author_ID INTEGER,
+                           FOREIGN KEY (Author_ID) REFERENCES Author(Author_ID) 
                         )''')
+        # Schedule Table
         script.execute('''CREATE TABLE IF NOT EXISTS Schedule (
-                           Transaction_ID INTEGER PRIMARY KEY AUTOINCREMENT
-                         , Payment_ID TEXT, Renter_ID TEXT
-                         , Book_ID TEXT, Rent_Date TEXT
-                         , Return_Date TEXT, isCompleted BOOL
-                         , FOREIGN KEY (Payment_ID) REFERENCES Payment(Payment_ID)
-                         , FOREIGN KEY (Renter_ID) REFERENCES Renter(Renter_ID)
-                         , FOREIGN KEY (Book_ID) REFERENCES Book(Book_ID)
+                          Transaction_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                          Payment_ID INTEGER, Renter_ID INTEGER,
+                          Book_ID INTEGER, Rent_Date "[DATETIME]",
+                          Return_Date "[DATETIME]", isCompleted    BOOL,
+                          FOREIGN KEY (Payment_ID) REFERENCES Payment (Payment_ID),
+                          FOREIGN KEY (Renter_ID) REFERENCES Renter (Renter_ID),
+                          FOREIGN KEY (Book_ID) REFERENCES Book (Book_ID)
                         )''')
         db.commit()
         script.close()

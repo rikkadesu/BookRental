@@ -29,6 +29,7 @@ class RentBookInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.rent_window.mainloop()
 
     def set_interface(self):
         # Header
@@ -113,8 +114,7 @@ class RentBookInterface:
                         "Email": email,
                         "Books": self.book_number
                     }
-                    payment_menu_window = payment_menu.PaymentInterface(self, self.rent_window, info)
-                    payment_menu_window.payment_window.wait_window()
+                    payment_menu.PaymentInterface(self, self.rent_window, info)
                 else:
                     messagebox.showwarning("Fields Required", "Please select a book.", parent=self.rent_window)
             else:
@@ -129,8 +129,7 @@ class RentBookInterface:
         self.rent_window.destroy()
 
     def book_list(self):
-        book_list_window = book_list.BookListInterface(self, self.rent_window)
-        book_list_window.bookList_window.wait_window()
+        book_list.BookListInterface(self, self.rent_window)
 
     def get_books(self, selected_list):
         self.selected_books = selected_list

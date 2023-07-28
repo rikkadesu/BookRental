@@ -23,6 +23,7 @@ class RemoveBookInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.remove_window.mainloop()
 
     def set_interface(self):
         # Header

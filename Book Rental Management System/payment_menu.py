@@ -30,6 +30,7 @@ class PaymentInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.payment_window.mainloop()
 
     def set_interface(self):
         # Header
@@ -174,11 +175,10 @@ class PaymentInterface:
         # Up to here -- Payment ID
 
         # This code block takes the latest Renter ID
-        if not self.renter_id:
-            sql_query = '''SELECT Renter_ID FROM Renter ORDER BY Renter_ID DESC LIMIT 1'''
-            script.execute(sql_query)
-            renter_result = script.fetchone()
-            self.renter_id = renter_result[0] if renter_result is not None else None
+        sql_query = '''SELECT Renter_ID FROM Renter ORDER BY Renter_ID DESC LIMIT 1'''
+        script.execute(sql_query)
+        renter_result = script.fetchone()
+        renter_id = renter_result[0] if renter_result is not None else None
         # print(f"Renter ID: {renter_id}")
         # Up to here -- Renter ID
 
@@ -186,11 +186,6 @@ class PaymentInterface:
         book_id = self.parent.get_bookID()
         # print(f"Book ID: {book_id}")
         # Up to here -- Book ID
-
-        # This code block takes the Admin ID of the responsible for this system
-        # >>> Input the code here later OKAAAAAAYYYYY?????
-        admin_id = 1  # Placeholder
-        # Up to here -- Admin ID
 
         # This code block takes the necessary date information for the transaction
         rent_date = self.take_currentDate()
@@ -202,9 +197,9 @@ class PaymentInterface:
         # Up to here -- Transaction Dates
 
         # This code block will perform the insertion of the data taken
-        insertToSchedule_query = '''INSERT INTO Schedule ( Payment_ID, Renter_ID, Book_ID, Employee_ID, 
-                                    Rent_Date, Return_Date, isCompleted) VALUES ( ?, ?, ?, ?, ?, ?, ? )'''
-        schedule_values = (payment_id, self.renter_id, book_id, admin_id, rent_date, return_date, 0)
+        insertToSchedule_query = '''INSERT INTO Schedule ( Payment_ID, Renter_ID, Book_ID, 
+                                    Rent_Date, Return_Date, isCompleted) VALUES ( ?, ?, ?, ?, ?, ?)'''
+        schedule_values = (payment_id, renter_id, book_id, rent_date, return_date, 0)
         script.execute(insertToSchedule_query, schedule_values)
         # Up to here -- Insertion to Schedule Table
 
@@ -238,8 +233,7 @@ class PaymentInterface:
 
 def main():
     dummy = Tk()
-    info = {"Books": 1}
-    PaymentInterface(dummy, None, info)
+    PaymentInterface(dummy, None, None)
 
 
 if __name__ == "__main__":

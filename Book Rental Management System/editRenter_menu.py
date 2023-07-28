@@ -11,7 +11,6 @@ class EditRenterInterface:
         self.renterInfoList = renter_info
         self.book_entry = self.book_button = self.email_entry = self.phone_entry = None
         self.lastname_entry = self.firstname_entry = self.middleinitial_entry = None
-        self.alreadyExists = False
 
         self.selected_bookID = None
         self.selected_books = []
@@ -31,6 +30,7 @@ class EditRenterInterface:
 
         self.set_interface()
         self.get_renterDetails()
+        self.editRenter_window.mainloop()
 
     def set_interface(self):
         # Header
@@ -131,7 +131,7 @@ class EditRenterInterface:
 
         if isLastNameValid and isFirstNameValid:
             if isEmailValid or isPhoneValid:
-                self.update_renter()
+                self.insert_renter()
 
                 self.editRenter_window.destroy()
             else:
@@ -144,96 +144,23 @@ class EditRenterInterface:
     def cancel(self):
         self.editRenter_window.destroy()
 
-    def update_renter(self):
+    def insert_renter(self):
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
         # This part is responsible for updating records into the Renter Table
-        new_renterID = self.check_redundantRenter(script)
-        if self.alreadyExists:
-            '''If the updated details matched one of the already existing record, it will
-               instead change the Renter ID associated with that transaction to avoid
-               redundancy'''
-            self.update_renterID(script, new_renterID)
-        else:
-            sql_query = '''UPDATE Renter SET Last_Name = ?, First_Name = ?, Middle_Initial = ?, Phone_Number = ?,
-                           Email = ? WHERE Renter_ID = ?'''
-            script.execute(sql_query, self.renter_details)
+        sql_query = '''UPDATE Renter SET Last_Name = ?, First_Name = ?, Middle_Initial = ?, Phone_Number = ?,
+                       Email = ? WHERE Renter_ID = ?'''
+        script.execute(sql_query, self.renter_details)
         # Up to here -- Renter Table
 
         db.commit()
         script.close()
         db.close()
 
-    def check_redundantRenter(self, script):
-        last_name = self.renter_details[0]
-        first_name = self.renter_details[1]
-        middle_initial = self.renter_details[2]
-        phone = self.renter_details[3]
-        email = self.renter_details[4]
-        renter_id = None
-
-        sql_query = '''SELECT Renter_ID FROM Renter
-                       WHERE Last_Name = ? AND First_Name = ? AND Middle_Initial = ?
-                       AND Phone_Number = ? AND Email = ?'''
-
-        if last_name and first_name is not None:
-            if middle_initial is not None:
-                if phone is not None and email is None:
-                    new_query = sql_query.replace("AND Email = ?", "AND Email IS NULL")
-                    script.execute(new_query, (last_name, first_name, middle_initial, phone))
-                    renter = script.fetchall()
-                    if len(renter) != 0:
-                        renter_id = renter[0]
-                        renter_id = renter_id[0]
-                elif phone is None and email is not None:
-                    new_query = sql_query.replace("AND Phone_Number = ?", "AND Phone_Number IS NULL")
-                    script.execute(new_query, (last_name, first_name, middle_initial, email))
-                    renter = script.fetchall()
-                    if len(renter) != 0:
-                        renter_id = renter[0]
-                        renter_id = renter_id[0]
-                elif phone is not None and email is not None:
-                    script.execute(sql_query, (last_name, first_name, middle_initial, phone, email))
-                    renter = script.fetchall()
-                    if len(renter) != 0:
-                        renter_id = renter[0]
-                        renter_id = renter_id[0]
-            elif middle_initial is None:
-                new_query = sql_query.replace("AND Middle_Initial = ?", "AND Middle_Initial IS NULL")
-                if phone is not None and email is None:
-                    new_query = new_query.replace("AND Email = ?", "AND Email IS NULL")
-                    script.execute(new_query, (last_name, first_name, phone))
-                    renter = script.fetchall()
-                    if len(renter) != 0:
-                        renter_id = renter[0]
-                        renter_id = renter_id[0]
-                elif phone is None and email is not None:
-                    new_query = new_query.replace("AND Phone_Number = ?", "AND Phone_Number IS NULL")
-                    script.execute(new_query, (last_name, first_name, email))
-                    renter = script.fetchall()
-                    if len(renter) != 0:
-                        renter_id = renter[0]
-                        renter_id = renter_id[0]
-                elif phone is not None and email is not None:
-                    script.execute(new_query, (last_name, first_name, phone, email))
-                    renter = script.fetchall()
-                    if len(renter) != 0:
-                        renter_id = renter[0]
-                        renter_id = renter_id[0]
-        if renter_id:
-            self.alreadyExists = True
-            return renter_id if renter_id else None
-
-    def update_renterID(self, script, new_renterID):
-        current_renterID = self.renter_details[5]
-
-        sql_query = '''UPDATE Schedule SET Renter_ID = ? WHERE Renter_ID = ?'''
-        script.execute(sql_query, (new_renterID, current_renterID))
-
 
 def main():
-    sample = [0, 0, 'The Brothers Karmazov', 'Dolor, Ipsum Sit A.', '2023-07-24', '2023-08-02']
+    sample = [45, 15, 'The Brothers Karmazov', 'Cao, Rohnel Angelo A.', '2023-07-24', '2023-08-02']
     EditRenterInterface(None, sample)
 
 

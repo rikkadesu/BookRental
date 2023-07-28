@@ -4,13 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="Added specific removal of record in Schedules List">
-      <change afterPath="$PROJECT_DIR$/settings_menu.py" afterDir="false" />
+    <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Book Rental Management System.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Book Rental Management System.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BOOK RENTAL.db" beforeDir="false" afterPath="$PROJECT_DIR$/BOOK RENTAL.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/late_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/late_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/add_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/add_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/book_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/book_list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/checker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editRenter_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/editRenter_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/remove_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/remove_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rent_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/rent_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/return_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/return_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schedule_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/schedule_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings_menu.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,37 +89,6 @@
       <option name="presentableId" value="Default" />
       <updated>1689761356047</updated>
     </task>
-    <task id="LOCAL-00001" summary="Added Late Fee and more code optimizations">
-      <created>1690450968477</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1690450968477</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Added specific removal of record in Schedules List">
-      <created>1690456892743</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1690456892743</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added Late Fee and more code optimizations" />
-    <MESSAGE value="Added specific removal of record in Schedules List" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added specific removal of record in Schedules List" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/return_menu.py</url>
-          <line>107</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
