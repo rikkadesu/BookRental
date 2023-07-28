@@ -84,6 +84,7 @@ class BookListInterface:
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
+        self.books.delete(*self.books.get_children())
         # Execute the SELECT statement to retrieve records
         script.execute('''SELECT Book_ID, Book_Name, Author_ID FROM Book
                           ORDER BY Author_ID''')

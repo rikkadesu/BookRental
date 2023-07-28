@@ -9,6 +9,14 @@ def is_validName(string: str, count: int) -> bool:
     return char_count >= count
 
 
+def is_validBookName(string, count):
+    char_count = 0
+    for char in string:
+        if char.isalnum():
+            char_count += 1
+    return char_count >= count
+
+
 def is_validPhone(number: str) -> bool:
     if len(number) == 13 or len(number) == 11:
         for num in number:

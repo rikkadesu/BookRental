@@ -138,7 +138,7 @@ class ReturnBookInterface:
             db.commit()
             script.close()
             db.close()
-            return renter_id  # Fetches the id from the result (RENTER) and return it
+        return renter_id  # Fetches the id from the result (RENTER) and return it
 
     def check_isLate(self, script: sqlite3.Cursor, transaction_id, renter_id):
         sql_query = '''SELECT Return_Date FROM Schedule WHERE Transaction_ID = ?'''

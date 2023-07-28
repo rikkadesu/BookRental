@@ -7,7 +7,8 @@ import payment_menu
 
 
 class RentBookInterface:
-    def __init__(self, parent):
+    def __init__(self, parent, parent_window):
+        self.parent = parent
         self.book_entry = self.book_button = self.email_entry = self.phone_entry = None
         self.lastname_entry = self.firstname_entry = self.middleinitial_entry = None
         self.book_number = 1
@@ -15,7 +16,7 @@ class RentBookInterface:
         self.selected_bookID = None
         self.selected_books = []
 
-        self.rent_window = Toplevel(parent)
+        self.rent_window = Toplevel(parent_window)
         self.rent_window.title("Rent A Book - Book Rental Mangement System")
         self.rent_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========
@@ -113,7 +114,7 @@ class RentBookInterface:
                         "Email": email,
                         "Books": self.book_number
                     }
-                    payment_menu.PaymentInterface(self, self.rent_window, info)
+                    payment_menu.PaymentInterface(self.parent, self, self.rent_window, info)
                 else:
                     messagebox.showwarning("Fields Required", "Please select a book.", parent=self.rent_window)
             else:

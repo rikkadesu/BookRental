@@ -3,14 +3,13 @@ from tkinter import messagebox
 from datetime import date, datetime, timedelta
 import sqlite3
 
-import main_menu
-
 
 class PaymentInterface:
-    def __init__(self, parent, parent_window, info):
+    def __init__(self, main_parent, parent, parent_window, info):
         self.renter_id = None
         self.info = info
         self.parent = parent
+        self.main_parent = main_parent
         self.parent_window = parent_window
         self.selected_method = None
         self.method_dropdown = None
@@ -49,7 +48,7 @@ class PaymentInterface:
         amount_label = Label(self.payment_window, text="Payment Amount", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
         amount_label.place(x=220, y=310 - 15)
         self.amount_entry = Entry(self.payment_window, font=("Segoe UI", 12), width=40)
-        self.amount_entry.insert(0, str(main_menu.BookRentalSystem.rent_fee*self.info.get("Books")))
+        self.amount_entry.insert(0, str(self.main_parent.rent_fee*self.info.get("Books")))
         self.amount_entry.configure(state="readonly")
         self.amount_entry.place(x=220, y=340 - 15)
 
@@ -232,7 +231,7 @@ class PaymentInterface:
 
 def main():
     dummy = Tk()
-    PaymentInterface(dummy, None, None)
+    PaymentInterface(dummy, None, None, None)
 
 
 if __name__ == "__main__":

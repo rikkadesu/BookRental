@@ -1,5 +1,7 @@
 from tkinter import *
 import sqlite3
+import json
+import os
 
 import add_menu
 import remove_menu
@@ -10,11 +12,10 @@ import settings_menu
 
 
 class BookRentalSystem:
-    rent_fee = 200
-    late_fee = 25
-
     def __init__(self, window):
         self.main_window = window
+        self.rent_fee = self.late_fee = None
+
         self.main_window.title("Book Rental Mangement System")
         self.main_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========
@@ -31,6 +32,7 @@ class BookRentalSystem:
         self.set_interface()
         # Initializes the database
         self.init_db()
+        self.init_settings()
 
     def set_interface(self):
         # Header
@@ -64,7 +66,7 @@ class BookRentalSystem:
         settings_button.place(x=10, y=550)
 
     def rent_book(self):
-        rent_menu.RentBookInterface(self.main_window)
+        rent_menu.RentBookInterface(self, self.main_window)
 
     def return_book(self):
         return_menu.ReturnBookInterface(self.main_window, None)
@@ -79,7 +81,7 @@ class BookRentalSystem:
         schedule_menu.ScheduleInterface(self.main_window)
 
     def settings(self):
-        settings_menu_window = settings_menu.SettingsInterface(self.main_window)
+        settings_menu_window = settings_menu.SettingsInterface(self, self.main_window)
         settings_menu_window.settings_window.wait_window()
 
     @staticmethod
@@ -134,6 +136,21 @@ class BookRentalSystem:
         db.commit()
         script.close()
         db.close()
+
+    def init_settings(self):  # Saves the settings in a json file
+        if os.path.exists('settings.json'):
+            with open('settings.json', 'r') as data:
+                settings = json.load(data)
+                self.rent_fee = settings['rent_fee']
+                self.late_fee = settings['late_fee']
+        else:
+            with open('settings.json', 'w') as data:
+                settings = {
+                            'rent_fee': '200',
+                            'late_fee': '25'
+                           }
+                json.dump(settings, data)
+            self.init_settings()
 
 
 def main():

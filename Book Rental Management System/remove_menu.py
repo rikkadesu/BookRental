@@ -54,7 +54,7 @@ class RemoveBookInterface:
             sql_query = '''DELETE FROM Book WHERE Book_ID = ?'''
             script.execute(sql_query, (book_id,))
             messagebox.showinfo("Success", "Book removed successfully", parent=self.remove_window)
-            self.remove_window.destroy()
+            self.book_entry.delete(0, END)
         elif book_id and not book_existing:
             messagebox.showwarning("Failed", f"Book with the ID {book_id} is not existing.", parent=self.remove_window)
         else:

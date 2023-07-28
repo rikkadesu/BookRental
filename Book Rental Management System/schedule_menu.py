@@ -261,16 +261,21 @@ class ScheduleInterface:
         self.show_completedRents() if self.show_var.get() else self.fetch_and_process_records()
 
     def edit_renter(self):
-        try:
-            item = self.schedules.selection()
-            if item:
-                values = self.schedules.item(item)['values']
-                editRenter_menu_window = editRenter_menu.EditRenterInterface(self.schedule_window, values)
-                editRenter_menu_window.editRenter_window.wait_window()
-                self.reset()
-        except _tkinter.TclError as error:
-            print("A table refresh call was called but the table was destroyed. Nothing to worry about though.")
-            print(f"Error message: {str(error).capitalize()}")
+        if not self.show_var.get():
+            try:
+                item = self.schedules.selection()
+                if item:
+                    values = self.schedules.item(item)['values']
+                    editRenter_menu_window = editRenter_menu.EditRenterInterface(self.schedule_window, values)
+                    editRenter_menu_window.editRenter_window.wait_window()
+                    self.reset()
+            except _tkinter.TclError as error:
+                print("A table refresh call was called but the table was destroyed. Nothing to worry about though.")
+                print(f"Error message: {str(error).capitalize()}")
+        else:
+            if self.schedules.selection():
+                messagebox.showinfo("Unnecessary action", "You are in Show Completed mode, "
+                                    "transactions here aren't allowed to be modified.", parent=self.schedule_window)
 
     def return_book(self):
         if not self.show_var.get():
@@ -290,7 +295,7 @@ class ScheduleInterface:
                 print("A table refresh call was called but the table was destroyed. Nothing to worry about though.")
                 print(f"Error message: {str(error).capitalize()}")
         else:
-            messagebox.showinfo("Invalid action", "You are in Show Completed mode, "
+            messagebox.showinfo("Unnecessary action", "You are in Show Completed mode, "
                                 "transactions here are already completed.", parent=self.schedule_window)
 
     @staticmethod

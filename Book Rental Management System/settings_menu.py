@@ -1,12 +1,13 @@
 from tkinter import messagebox
 from tkinter import *
-
-import main_menu
+import json
 
 
 class SettingsInterface:
-    def __init__(self, parent_window):
+    def __init__(self, parent, parent_window):
         self.late_fee_entry = self.rent_fee_entry = None
+        self.parent = parent
+
         self.settings_window = Toplevel(parent_window)
         self.settings_window.title("Settings - Book Rental Mangement System")
         self.settings_window.configure(bg="#f2eecb")
@@ -29,13 +30,13 @@ class SettingsInterface:
         rent_fee_label = Label(self.settings_window, text="Rent Fee", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
         rent_fee_label.place(x=100, y=120)
         self.rent_fee_entry = Entry(self.settings_window, font=("Segoe UI", 10), width=20)
-        self.rent_fee_entry.insert(0, main_menu.BookRentalSystem.rent_fee)
+        self.rent_fee_entry.insert(0, self.parent.rent_fee)
         self.rent_fee_entry.place(x=180, y=120)
 
         late_fee_label = Label(self.settings_window, text="Late Fee", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
         late_fee_label.place(x=100, y=150)
         self.late_fee_entry = Entry(self.settings_window, font=("Segoe UI", 10), width=20)
-        self.late_fee_entry.insert(0, main_menu.BookRentalSystem.late_fee)
+        self.late_fee_entry.insert(0, self.parent.late_fee)
         self.late_fee_entry.place(x=180, y=150)
 
         save_button = Button(self.settings_window, text="SAVE", font=("Segoe UI", 12, "bold"), width=12)
@@ -51,8 +52,13 @@ class SettingsInterface:
         new_late_fee = self.late_fee_entry.get() if str(self.late_fee_entry.get()).isnumeric() else None
 
         if new_rent_fee and new_late_fee:
-            main_menu.BookRentalSystem.rent_fee = int(new_rent_fee)
-            main_menu.BookRentalSystem.late_fee = int(new_late_fee)
+            with open('settings.json', 'w') as data:
+                settings = {
+                    'rent_fee': new_rent_fee,
+                    'late_fee': new_late_fee
+                }
+                json.dump(settings, data)
+            self.parent.init_settings()
             messagebox.showinfo("Saved", "Settings saved successfully", parent=self.settings_window)
         else:
             messagebox.showwarning("Incorrect inputs", '''One of the fields may be incorrect. 
@@ -61,10 +67,10 @@ class SettingsInterface:
     def cancel(self):
         self.settings_window.destroy()
 
+
 def main():
     main_window = Tk()
-    SettingsInterface(None)
-
+    SettingsInterface(None, main_window)
     main_window.mainloop()
 
 
