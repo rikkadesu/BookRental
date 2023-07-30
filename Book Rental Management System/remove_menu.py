@@ -49,12 +49,16 @@ class RemoveBookInterface:
 
         book_id = self.book_entry.get() if self.book_entry.get() != "" else None
         book_existing = self.isExisting(book_id, script)
+        isRented = self.getBookStatus(book_id, script)
 
-        if book_id and book_existing:
+        if book_id and book_existing and not isRented:
             sql_query = '''DELETE FROM Book WHERE Book_ID = ?'''
             script.execute(sql_query, (book_id,))
             messagebox.showinfo("Success", "Book removed successfully", parent=self.remove_window)
             self.book_entry.delete(0, END)
+        elif isRented:
+            messagebox.showinfo("Failed", "Book is currently rented, can't be removed from the system currently.",
+                                parent=self.remove_window)
         elif book_id and not book_existing:
             messagebox.showwarning("Failed", f"Book with the ID {book_id} is not existing.", parent=self.remove_window)
         else:
@@ -73,6 +77,18 @@ class RemoveBookInterface:
         script.execute(sql_query, (book_id,))
         fetched = script.fetchall()
         return True if len(fetched) != 0 else False
+
+    @staticmethod
+    def getBookStatus(book_id, script):
+        sql_query = '''SELECT isCompleted FROM Schedule WHERE Book_ID = ?'''
+        script.execute(sql_query, (book_id,))
+        status = script.fetchall()
+
+        if status:
+            for availability in status:
+                if 0 in availability:
+                    return True
+            return False
 
 
 def main():

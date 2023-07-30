@@ -91,44 +91,44 @@ class BookRentalSystem:
 
         # Renter Table
         script.execute('''CREATE TABLE IF NOT EXISTS Renter (
-                            Renter_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                            Last_Name "[NVARCHAR]" (50) NOT NULL,
-                            First_Name "[NVARCHAR]" (50) NOT NULL,
-                            Middle_Initial "[NVARCHAR] (5)",
-                            Phone_Number "[NVARCHAR]" (13),
-                            Email "[NVARCHAR]" (100)
+                            Renter_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                            Last_Name NVARCHAR(50) NOT NULL,
+                            First_Name NVARCHAR(50) NOT NULL,
+                            Middle_Initial NVARCHAR(5),
+                            Phone_Number NVARCHAR(13),
+                            Email NVARCHAR(100)
                         )''')
         # Author Table
         script.execute('''CREATE TABLE IF NOT EXISTS Author(
                             Author_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                            Author_Name "[NVARCHAR]" (100) NOT NULL
+                            Author_Name NVARCHAR(100) NOT NULL
                         )''')
         # Payment Table
         script.execute('''CREATE TABLE IF NOT EXISTS Payment (
                             Payment_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                            Payment_Amount "[NVARCHAR]" (50) NOT NULL,
-                            Payment_Date "[DATETIME]" NOT NULL,
-                            Payment_Mode "[NVARCHAR]" (50) NOT NULL
+                            Payment_Amount NVARCHAR(50) NOT NULL,
+                            Payment_Date DATETIME NOT NULL,
+                            Payment_Mode NVARCHAR(50) NOT NULL
                         )''')
         # Late Fee Table
         script.execute('''CREATE TABLE IF NOT EXISTS LateFee (
                             LateFee_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                            Renter_ID INTEGER, Fee "[NVARCHAR]" (50) NOT NULL, Days_Late INTEGER,
+                            Renter_ID INTEGER NOT NULL, Fee NVARCHAR(50) NOT NULL, Days_Late INTEGER,
                             FOREIGN KEY (Renter_ID) REFERENCES Renter(Renter_ID)
                         )''')
         # Book Table
         script.execute('''CREATE TABLE IF NOT EXISTS Book (
                            Book_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                           Book_Name "[NVARCHAR]" (50) NOT NULL,
-                           Author_ID INTEGER,
+                           Book_Name NVARCHAR(50) NOT NULL,
+                           Author_ID INTEGER NOT NULL,
                            FOREIGN KEY (Author_ID) REFERENCES Author(Author_ID) 
                         )''')
         # Schedule Table
         script.execute('''CREATE TABLE IF NOT EXISTS Schedule (
                           Transaction_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                          Payment_ID INTEGER, Renter_ID INTEGER,
-                          Book_ID INTEGER, Rent_Date "[DATETIME]",
-                          Return_Date "[DATETIME]", isCompleted    BOOL,
+                          Payment_ID INTEGER NOT NULL, Renter_ID INTEGER NOT NULL,
+                          Book_ID INTEGER NOT NULL, Rent_Date DATETIME NOT NULL,
+                          Return_Date DATETIME NOT NULL, isCompleted BOOL NOT NULL,
                           FOREIGN KEY (Payment_ID) REFERENCES Payment (Payment_ID),
                           FOREIGN KEY (Renter_ID) REFERENCES Renter (Renter_ID),
                           FOREIGN KEY (Book_ID) REFERENCES Book (Book_ID)
@@ -156,7 +156,6 @@ class BookRentalSystem:
 def main():
     main_window = Tk()
     BookRentalSystem(main_window)
-
     main_window.mainloop()
 
 
