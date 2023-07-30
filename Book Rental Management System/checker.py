@@ -18,36 +18,13 @@ def is_validBookName(string, count):
 
 
 def is_validPhone(number: str) -> bool:
-    if len(number) == 13 or len(number) == 11:
-        for num in number:
-            if not num.isnumeric():
-                if not num == '+':
-                    return False
-        return True
-    return False
+    pattern = r'^(09\d{9}|(\+639)\d{9})$'
+    return True if re.match(pattern, number) else False
 
 
 def is_validEmail(email: str) -> bool:
     pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-    if re.match(pattern, email):
-        return True
-    else:
-        return False
-
-
-def split_name(name: str) -> list:
-    # Holds the last name, first name, middle intial
-    names = []
-    # Define the regex pattern for splitting the name
-    pattern = r"(\w+\s*\w*)\s*(\w*\.+)?\s+(\w+\-*\w*)"
-    # Perform the regex matching
-    matches = re.match(pattern, name)
-    # Extract the components of the name
-    names.append(matches.group(3))
-    names.append(matches.group(1))
-    names.append(matches.group(2))
-
-    return names
+    return True if re.match(pattern, email) else False
 
 
 def main():

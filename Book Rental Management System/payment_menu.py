@@ -3,6 +3,8 @@ from tkinter import messagebox
 from datetime import date, datetime, timedelta
 import sqlite3
 
+import background
+
 
 class PaymentInterface:
     def __init__(self, main_parent, parent, parent_window, info):
@@ -17,7 +19,7 @@ class PaymentInterface:
 
         self.payment_window = Toplevel(parent_window)
         self.payment_window.title("Payment - Book Rental Mangement System")
-        self.payment_window.configure(bg="#f2eecb")
+        self.payment_window.configure(bg="#FCC000")
         # ==========   Places the window at the center   ==========
         screen_width = self.payment_window.winfo_screenwidth()
         screen_height = self.payment_window.winfo_screenheight()
@@ -32,11 +34,11 @@ class PaymentInterface:
 
     def set_interface(self):
         # Header
-        main_header = Label(self.payment_window, text="PAYMENT", font=("Segoe UI", 20, "bold"), bg="#f2eecb")
+        main_header = Label(self.payment_window, text="PAYMENT", font=("Segoe UI", 20, "bold"), bg="#FCC000")
         main_header.place(x=340, y=100)
 
         # Entryboxes
-        method_label = Label(self.payment_window, text="Payment Method", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
+        method_label = Label(self.payment_window, text="Payment Method", font=("Segoe UI", 12, "bold"), bg="#FCC000")
         method_label.place(x=220, y=250 - 35)
         method_list = ["Cash", "GCash"]
         self.selected_method = StringVar(self.payment_window)
@@ -45,18 +47,22 @@ class PaymentInterface:
         self.method_dropdown.configure(width=30, font=("Segoe UI", 10, "bold"))
         self.method_dropdown.place(x=220, y=280 - 35)
 
-        amount_label = Label(self.payment_window, text="Payment Amount", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
+        amount_label = Label(self.payment_window, text="Payment Amount", font=("Segoe UI", 12, "bold"), bg="#FCC000")
         amount_label.place(x=220, y=310 - 15)
         self.amount_entry = Entry(self.payment_window, font=("Segoe UI", 12), width=40)
         self.amount_entry.insert(0, str(self.main_parent.rent_fee*self.info.get("Books")))
         self.amount_entry.configure(state="readonly")
         self.amount_entry.place(x=220, y=340 - 15)
 
-        save_button = Button(self.payment_window, text="SAVE", font=("Segoe UI", 12, "bold"), width=12)
+        save_button = Button(self.payment_window, text="SAVE", font=("Segoe UI", 12, "bold"),
+                             image=background.Background.save_ico(self), compound='left', width=120, height=29,
+                             bg="#FFC000", fg="#800000")
         save_button.configure(command=self.save)
         save_button.place(x=329, y=530)
 
-        cancel_button = Button(self.payment_window, text="CANCEL", font=("Segoe UI", 12, "bold"), width=12)
+        cancel_button = Button(self.payment_window, text="CANCEL", font=("Segoe UI", 12, "bold"),
+                               image=background.Background.cancel_ico(self), compound='left', width=120, height=29,
+                               bg="#FFC000", fg="#800000")
         cancel_button.configure(command=self.cancel)
         cancel_button.place(x=462, y=530)
 

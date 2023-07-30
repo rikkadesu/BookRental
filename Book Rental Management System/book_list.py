@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import sqlite3
+import background
 
 
 class BookListInterface:
@@ -10,7 +11,6 @@ class BookListInterface:
 
         self.bookList_window = Toplevel(parent_window)
         self.bookList_window.title("Book List - Book Rental Mangement System")
-        self.bookList_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========
         screen_width = self.bookList_window.winfo_screenwidth()
         screen_height = self.bookList_window.winfo_screenheight()
@@ -25,24 +25,31 @@ class BookListInterface:
 
     def set_interface(self):
         # Header
-        main_header = Label(self.bookList_window, text="BOOK LIST", font=("Segoe UI", 20, "bold"), bg="#f2eecb")
-        main_header.place(x=340, y=50)
-
-        authorName_label = Label(self.bookList_window, text="Author", font=("Segoe UI", 10, "bold"), bg="#f2eecb")
-        authorName_label.place(x=298, y=125)
-        self.authorName_entry = Entry(self.bookList_window, font=("Segoe UI", 10), width=20)
+        main_header = Canvas(self.bookList_window)
+        main_header.create_image(0, 0, image=background.Background.library_bg(self), anchor=NW)
+        main_header.create_text(398, 75, text="BOOK LIST", fill="#FFC000",
+                                font=("Segoe UI", 20, "bold"))
+        main_header.create_image(250, 0, image=background.Background.smudge_bg(self), anchor=NW)
+        main_header.create_text(395, 72, text="BOOK LIST", fill="#800000",
+                                font=("Segoe UI", 20, "bold"))
+        main_header.create_image(299, 125, image=background.Background.author_small_bg(self), anchor=NW)
+        main_header.create_text(315, 136, text="    Author", fill="#800000",
+                                font=("Segoe UI", 10, "bold"))
+        self.authorName_entry = Entry(self.bookList_window, font=("Segoe UI", 10), width=20, bg="#FFC000")
         self.authorName_entry.place(x=350, y=125)
-
-        bookFilter_label = Label(self.bookList_window, text="Book Name", font=("Segoe UI", 10, "bold"), bg="#f2eecb")
-        bookFilter_label.place(x=500, y=125)
-        self.bookFilter_entry = Entry(self.bookList_window, font=("Segoe UI", 10), width=20)
+        main_header.create_image(501, 125, image=background.Background.bookname_bg(self), anchor=NW)
+        main_header.create_text(531, 136, text="    Book Name", fill="#800000",
+                                font=("Segoe UI", 10, "bold"))
+        self.bookFilter_entry = Entry(self.bookList_window, font=("Segoe UI", 10), width=20, bg="#FFC000")
         self.bookFilter_entry.place(x=580, y=125)
-
-        bookFilter_button = Button(self.bookList_window, text="SEARCH", font=("Segoe UI", 9, "bold"), width=8)
+        main_header.pack(fill="both", expand=True)
+        bookFilter_button = Button(self.bookList_window, text="SEARCH", bg="#FFC000",
+                                   fg="#800000", font=("Segoe UI", 9, "bold"), width=8)
         bookFilter_button.configure(command=self.do_filter)
         bookFilter_button.place(x=731, y=122)
 
-        self.clearFilter_button = Button(self.bookList_window, text="Refresh", font=("Segoe UI", 9, "bold"), width=12)
+        self.clearFilter_button = Button(self.bookList_window, text="Refresh", bg="#FFC000",
+                                         fg="#800000", font=("Segoe UI", 9, "bold"), width=12)
         self.clearFilter_button.configure(command=self.clear_filter)
         self.clearFilter_button.place(x=5, y=122)
 
@@ -62,7 +69,8 @@ class BookListInterface:
         self.books.place(x=5, y=150)
         # ==========  Table  ==========
 
-        select_button = Button(self.bookList_window, text="Select", font=("Segoe UI", 12, "bold"), width=12)
+        select_button = Button(self.bookList_window, text="Select", bg="#FFC000",
+                               fg="#800000", font=("Segoe UI", 12, "bold"), width=12)
         select_button.configure(command=self.select_book)
         select_button.place(x=340, y=550)
 
@@ -86,7 +94,7 @@ class BookListInterface:
 
         self.books.delete(*self.books.get_children())
         # Execute the SELECT statement to retrieve records
-        script.execute('''SELECT Book_ID, Book_Name, Author_ID FROM Book
+        script.execute('''SELECT Book_ID, Book_Name, Author_ID FROM Book WHERE isRemoved = 0
                           ORDER BY Author_ID''')
         records = script.fetchall()
 
@@ -218,7 +226,9 @@ class BookListInterface:
 
 
 def main():
-    BookListInterface(None, None)
+    main_window = Tk()
+    BookListInterface(main_window, None)
+    main_window.mainloop()
 
 
 if __name__ == "__main__":

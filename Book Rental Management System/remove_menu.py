@@ -2,7 +2,7 @@ import sqlite3
 from tkinter import *
 from tkinter import messagebox
 
-import checker
+import background
 
 
 class RemoveBookInterface:
@@ -11,7 +11,6 @@ class RemoveBookInterface:
 
         self.remove_window = Toplevel(parent_window)
         self.remove_window.title("Remove A Book - Book Rental Mangement System")
-        self.remove_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========
         screen_width = self.remove_window.winfo_screenwidth()
         screen_height = self.remove_window.winfo_screenheight()
@@ -26,20 +25,29 @@ class RemoveBookInterface:
 
     def set_interface(self):
         # Header
-        main_header = Label(self.remove_window, text="REMOVE A BOOK", font=("Segoe UI", 20, "bold"), bg="#f2eecb")
-        main_header.place(x=300, y=100)
+        main_header = Canvas(self.remove_window)
+        main_header.create_image(0, 0, image=background.Background.add_bg(self), anchor=NW)
+        main_header.create_text(390, 123, text="REMOVE A BOOK", fill="#FFC000",
+                                font=("Segoe UI", 20, "bold"))
+        main_header.create_text(387, 120, text="REMOVE A BOOK", fill="#800000",
+                                font=("Segoe UI", 20, "bold"))
+
+        main_header.pack(fill="both", expand=True)
 
         # Entryboxes
-        book_label = Label(self.remove_window, text="Book ID", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
-        book_label.place(x=220, y=250 - 35)
-        self.book_entry = Entry(self.remove_window, font=("Segoe UI", 12), width=40)
+        main_header.create_image(220, 213, image=background.Background.bookid_bg(self), anchor=NW)
+        main_header.create_text(252, 225, text="    Book ID", fill="#800000",
+                                font=("Segoe UI", 12, "bold"))
+        self.book_entry = Entry(self.remove_window, font=("Segoe UI", 12), width=40, bg="#FFC000")
         self.book_entry.place(x=220, y=280 - 35)
 
-        save_button = Button(self.remove_window, text="SAVE", font=("Segoe UI", 12, "bold"), width=12)
+        save_button = Button(self.remove_window, text="SAVE", bg="#FFC000", fg="#800000", font=("Segoe UI", 12, "bold"),
+                             image=background.Background.save_ico(self), compound='left', width=120, height=29)
         save_button.configure(command=self.save)
         save_button.place(x=329, y=530)
 
-        cancel_button = Button(self.remove_window, text="CANCEL", font=("Segoe UI", 12, "bold"), width=12)
+        cancel_button = Button(self.remove_window, text="CANCEL", bg="#FFC000", fg="#800000", font=("Segoe UI", 12, "bold"),
+                               image=background.Background.cancel_ico(self), compound='left', width=120, height=29)
         cancel_button.configure(command=self.cancel)
         cancel_button.place(x=462, y=530)
 
@@ -52,7 +60,7 @@ class RemoveBookInterface:
         isRented = self.getBookStatus(book_id, script)
 
         if book_id and book_existing and not isRented:
-            sql_query = '''DELETE FROM Book WHERE Book_ID = ?'''
+            sql_query = '''UPDATE Book SET isRemoved = 1 WHERE Book_ID = ?'''
             script.execute(sql_query, (book_id,))
             messagebox.showinfo("Success", "Book removed successfully", parent=self.remove_window)
             self.book_entry.delete(0, END)

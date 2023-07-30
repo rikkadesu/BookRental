@@ -9,6 +9,7 @@ import rent_menu
 import return_menu
 import schedule_menu
 import settings_menu
+import background
 
 
 class BookRentalSystem:
@@ -17,7 +18,6 @@ class BookRentalSystem:
         self.rent_fee = self.late_fee = None
 
         self.main_window.title("Book Rental Mangement System")
-        self.main_window.configure(bg="#f2eecb")
         # ==========   Places the window at the center   ==========
         screen_width = self.main_window.winfo_screenwidth()
         screen_height = self.main_window.winfo_screenheight()
@@ -36,32 +36,44 @@ class BookRentalSystem:
 
     def set_interface(self):
         # Header
-        main_header = Label(text="BOOK RENTAL MANAGEMENT SYSTEM", font=("Segoe UI", 20, "bold"))
-        main_header.configure(bg="#f2eecb")
-        main_header.place(x=140, y=100)
+        main_header = Canvas(self.main_window)
+        main_header.create_image(0, 0, image=background.Background.main_bg(self), anchor=NW)
+        main_header.create_image(340, 40, image=background.Background.logo(self), anchor=NW)
+        main_header.create_text(393, 183, text="BOOK RENTAL MANAGEMENT SYSTEM", fill="#FFC000",
+                                font=("Segoe UI", 20, "bold"))
+        main_header.create_text(390, 180, text="BOOK RENTAL MANAGEMENT SYSTEM", fill="#800000",
+                                font=("Segoe UI", 20, "bold"))
+
+        main_header.pack(fill="both", expand=True)
 
         # Buttons
-        rent_button = Button(text="RENT A BOOK", font=("Segoe UI", 12, "bold"), width=49)
+        rent_button = Button(text="RENT A BOOK", bg="#FFC000", fg="#800000",
+                             font=("Segoe UI", 12, "bold"), width=49)
         rent_button.configure(command=self.rent_book)
         rent_button.place(x=140, y=250)
 
-        return_button = Button(text="RETURN A BOOK", font=("Segoe UI", 12, "bold"), width=49)
+        return_button = Button(text="RETURN A BOOK", bg="#FFC000", fg="#800000",
+                               font=("Segoe UI", 12, "bold"), width=49)
         return_button.configure(command=self.return_book)
         return_button.place(x=140, y=310)
 
-        add_button = Button(text="ADD BOOK", font=("Segoe UI", 12, "bold"), width=49)
+        add_button = Button(text="ADD BOOK", bg="#FFC000", fg="#800000",
+                            font=("Segoe UI", 12, "bold"), width=49)
         add_button.configure(command=self.add_book)
         add_button.place(x=140, y=370)
 
-        remove_book = Button(text="REMOVE BOOK", font=("Segoe UI", 12, "bold"), width=49)
+        remove_book = Button(text="REMOVE BOOK", bg="#FFC000", fg="#800000",
+                             font=("Segoe UI", 12, "bold"), width=49)
         remove_book.configure(command=self.remove_book)
         remove_book.place(x=140, y=430)
 
-        sched_button = Button(text="SHOW RENT SCHEDULE", font=("Segoe UI", 12, "bold"), width=49)
+        sched_button = Button(text="SHOW RENT SCHEDULE", bg="#FFC000", fg="#800000",
+                              font=("Segoe UI", 12, "bold"), width=49)
         sched_button.configure(command=self.see_sched)
         sched_button.place(x=140, y=490)
 
-        settings_button = Button(text="Settings", font=("Segoe UI", 9, "bold"), width=5, height=2)
+        settings_button = Button(bg="#FFC000", fg="#800000", width=35, height=35,
+                                 image=background.Background.settings_ico(self))
         settings_button.configure(command=self.settings)
         settings_button.place(x=10, y=550)
 
@@ -91,38 +103,39 @@ class BookRentalSystem:
 
         # Renter Table
         script.execute('''CREATE TABLE IF NOT EXISTS Renter (
-                            Renter_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                            Last_Name NVARCHAR(50) NOT NULL,
-                            First_Name NVARCHAR(50) NOT NULL,
-                            Middle_Initial NVARCHAR(5),
-                            Phone_Number NVARCHAR(13),
-                            Email NVARCHAR(100)
-                        )''')
+                          Renter_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                          Last_Name NVARCHAR(50) NOT NULL,
+                          First_Name NVARCHAR(50) NOT NULL,
+                          Middle_Initial NVARCHAR(5),
+                          Phone_Number NVARCHAR(13),
+                          Email NVARCHAR(100)
+                          )''')
         # Author Table
         script.execute('''CREATE TABLE IF NOT EXISTS Author(
-                            Author_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                            Author_Name NVARCHAR(100) NOT NULL
-                        )''')
+                          Author_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                          Author_Name NVARCHAR(100) NOT NULL
+                          )''')
         # Payment Table
         script.execute('''CREATE TABLE IF NOT EXISTS Payment (
-                            Payment_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                            Payment_Amount NVARCHAR(50) NOT NULL,
-                            Payment_Date DATETIME NOT NULL,
-                            Payment_Mode NVARCHAR(50) NOT NULL
-                        )''')
+                          Payment_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                          Payment_Amount NVARCHAR(50) NOT NULL,
+                          Payment_Date DATETIME NOT NULL,
+                          Payment_Mode NVARCHAR(50) NOT NULL
+                          )''')
         # Late Fee Table
         script.execute('''CREATE TABLE IF NOT EXISTS LateFee (
-                            LateFee_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                            Renter_ID INTEGER NOT NULL, Fee NVARCHAR(50) NOT NULL, Days_Late INTEGER,
-                            FOREIGN KEY (Renter_ID) REFERENCES Renter(Renter_ID)
-                        )''')
+                          LateFee_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                          Renter_ID INTEGER NOT NULL, Fee NVARCHAR(50) NOT NULL, Days_Late INTEGER,
+                          FOREIGN KEY (Renter_ID) REFERENCES Renter(Renter_ID)
+                          )''')
         # Book Table
         script.execute('''CREATE TABLE IF NOT EXISTS Book (
-                           Book_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                           Book_Name NVARCHAR(50) NOT NULL,
-                           Author_ID INTEGER NOT NULL,
-                           FOREIGN KEY (Author_ID) REFERENCES Author(Author_ID) 
-                        )''')
+                          Book_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                          Author_ID INTEGER NOT NULL,
+                          Book_Name NVARCHAR(50) NOT NULL,
+                          isRemoved INTEGER NOT NULL,
+                          FOREIGN KEY (Author_ID) REFERENCES Author(Author_ID) 
+                          )''')
         # Schedule Table
         script.execute('''CREATE TABLE IF NOT EXISTS Schedule (
                           Transaction_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -132,7 +145,7 @@ class BookRentalSystem:
                           FOREIGN KEY (Payment_ID) REFERENCES Payment (Payment_ID),
                           FOREIGN KEY (Renter_ID) REFERENCES Renter (Renter_ID),
                           FOREIGN KEY (Book_ID) REFERENCES Book (Book_ID)
-                        )''')
+                          )''')
         db.commit()
         script.close()
         db.close()
@@ -156,6 +169,7 @@ class BookRentalSystem:
 def main():
     main_window = Tk()
     BookRentalSystem(main_window)
+
     main_window.mainloop()
 
 

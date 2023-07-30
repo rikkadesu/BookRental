@@ -5,6 +5,8 @@ from tkinter import *
 from tkinter import ttk, messagebox
 
 import sqlite3
+
+import background
 import editRenter_menu
 import return_menu
 
@@ -17,7 +19,7 @@ class ScheduleInterface:
 
         self.schedule_window = Toplevel(parent_window)
         self.schedule_window.title("Schedules - Book Rental Mangement System")
-        self.schedule_window.configure(bg="#f2eecb")
+        self.schedule_window.configure(bg="#FCC000")
         # ==========   Places the window at the center   ==========
         screen_width = self.schedule_window.winfo_screenwidth()
         screen_height = self.schedule_window.winfo_screenheight()
@@ -33,39 +35,42 @@ class ScheduleInterface:
     def set_interface(self):
         # Header
         main_header = Label(self.schedule_window, text="RENTED BOOK SCHEDULES", font=("Segoe UI", 20, "bold"))
-        main_header.configure(bg="#f2eecb")
+        main_header.configure(bg="#FCC000")
         main_header.place(x=140, y=40)
 
         # Filter
-        lastname_label = Label(self.schedule_window, text="Renter LN", font=("Segoe UI", 10, "bold"), bg="#f2eecb")
+        lastname_label = Label(self.schedule_window, text="Renter LN", font=("Segoe UI", 10, "bold"), bg="#FCC000")
         lastname_label.place(x=84+50, y=125)
         self.lastname_entry = Entry(self.schedule_window, font=("Segoe UI", 10), width=16)
         self.lastname_entry.place(x=154+50, y=125)
 
-        firstname_label = Label(self.schedule_window, text="Renter FN", font=("Segoe UI", 10, "bold"), bg="#f2eecb")
+        firstname_label = Label(self.schedule_window, text="Renter FN", font=("Segoe UI", 10, "bold"), bg="#FCC000")
         firstname_label.place(x=276+50, y=125)
         self.firstname_entry = Entry(self.schedule_window, font=("Segoe UI", 10), width=16)
         self.firstname_entry.place(x=346+50, y=125)
 
-        middleinitial_label = Label(self.schedule_window, text="Renter MI", font=("Segoe UI", 10, "bold"), bg="#f2eecb")
+        middleinitial_label = Label(self.schedule_window, text="Renter MI", font=("Segoe UI", 10, "bold"), bg="#FCC000")
         middleinitial_label.place(x=464+50, y=125)
         self.middleinitial_entry = Entry(self.schedule_window, font=("Segoe UI", 10), width=5)
         self.middleinitial_entry.place(x=534+50, y=125)
 
-        bookFilter_label = Label(self.schedule_window, text="Book Name", font=("Segoe UI", 10, "bold"), bg="#f2eecb")
+        bookFilter_label = Label(self.schedule_window, text="Book Name", font=("Segoe UI", 10, "bold"), bg="#FCC000")
         bookFilter_label.place(x=628, y=125)
         self.bookFilter_entry = Entry(self.schedule_window, font=("Segoe UI", 10), width=30)
         self.bookFilter_entry.place(x=711, y=125)
 
-        bookFilter_button = Button(self.schedule_window, text="SEARCH", font=("Segoe UI", 9, "bold"), width=8)
+        bookFilter_button = Button(self.schedule_window, text="SEARCH", bg="#FFC000",
+                                   fg="#800000", font=("Segoe UI", 9, "bold"), width=8)
         bookFilter_button.configure(command=self.do_filter)
         bookFilter_button.place(x=930, y=122)
 
-        self.clearFilter_button = Button(self.schedule_window, text="Refresh", font=("Segoe UI", 9, "bold"), width=10)
+        self.clearFilter_button = Button(self.schedule_window, text="Refresh", bg="#FFC000",
+                                         fg="#800000", font=("Segoe UI", 9, "bold"), width=10)
         self.clearFilter_button.configure(command=self.reset)
         self.clearFilter_button.place(x=5, y=122)
 
-        edit_button = Button(self.schedule_window, text="Edit", font=("Segoe UI", 9, "bold"), width=3)
+        edit_button = Button(self.schedule_window, bg="#FFC000", fg="#800000", width=20, height=20,
+                             image=background.Background.renter_edit_ico(self))
         edit_button.configure(command=self.edit_renter)
         edit_button.place(x=90, y=122)
 
@@ -93,12 +98,13 @@ class ScheduleInterface:
         # ==========  Table  ==========
 
         # Button
-        return_button = Button(self.schedule_window, text="RETURN A BOOK", font=("Segoe UI", 12, "bold"), width=14)
+        return_button = Button(self.schedule_window, text="RETURN A BOOK", bg="#FFC000",
+                               fg="#800000", font=("Segoe UI", 12, "bold"), width=14)
         return_button.configure(command=self.return_book)
         return_button.place(x=800, y=25)
 
         show_completed_button = Checkbutton(self.schedule_window, text="Show Completed", variable=self.show_var)
-        show_completed_button.configure(command=self.show_completedRents, bg="#f2eecb", font=("Segoe UI", 10, "bold"))
+        show_completed_button.configure(command=self.show_completedRents, bg="#FCC000", font=("Segoe UI", 10, "bold"))
         self.show_var.set(0)
         show_completed_button.place(x=800, y=65)
 

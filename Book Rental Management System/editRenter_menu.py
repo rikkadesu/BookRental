@@ -17,7 +17,7 @@ class EditRenterInterface:
 
         self.editRenter_window = Toplevel(parent)
         self.editRenter_window.title("Edit Renter - Book Rental Mangement System")
-        self.editRenter_window.configure(bg="#f2eecb")
+        self.editRenter_window.configure(bg="#FCC000")
         # ==========   Places the window at the center   ==========
         screen_width = self.editRenter_window.winfo_screenwidth()
         screen_height = self.editRenter_window.winfo_screenheight()
@@ -33,40 +33,42 @@ class EditRenterInterface:
 
     def set_interface(self):
         # Header
-        main_header = Label(self.editRenter_window, text="EDIT RENTER", font=("Segoe UI", 20, "bold"), bg="#f2eecb")
+        main_header = Label(self.editRenter_window, text="EDIT RENTER", font=("Segoe UI", 20, "bold"), bg="#FCC000")
         main_header.place(x=300, y=100)
 
         # Entryboxes
-        lastname_label = Label(self.editRenter_window, text="Last Name", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
+        lastname_label = Label(self.editRenter_window, text="Last Name", font=("Segoe UI", 12, "bold"), bg="#FCC000")
         lastname_label.place(x=220, y=250 - 35)
         self.lastname_entry = Entry(self.editRenter_window, font=("Segoe UI", 12), width=16)
         self.lastname_entry.place(x=220, y=280 - 35)
 
-        firstname_label = Label(self.editRenter_window, text="First Name", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
+        firstname_label = Label(self.editRenter_window, text="First Name", font=("Segoe UI", 12, "bold"), bg="#FCC000")
         firstname_label.place(x=370, y=250-35)
         self.firstname_entry = Entry(self.editRenter_window, font=("Segoe UI", 12), width=18)
         self.firstname_entry.place(x=368, y=280-35)
 
-        middleinitial_label = Label(self.editRenter_window, text="M.I.", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
+        middleinitial_label = Label(self.editRenter_window, text="M.I.", font=("Segoe UI", 12, "bold"), bg="#FCC000")
         middleinitial_label.place(x=534, y=250 - 35)
         self.middleinitial_entry = Entry(self.editRenter_window, font=("Segoe UI", 12), width=5)
         self.middleinitial_entry.place(x=534, y=280 - 35)
 
-        phone_label = Label(self.editRenter_window, text="Phone Number", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
+        phone_label = Label(self.editRenter_window, text="Phone Number", font=("Segoe UI", 12, "bold"), bg="#FCC000")
         phone_label.place(x=220, y=310-35)
         self.phone_entry = Entry(self.editRenter_window, font=("Segoe UI", 12), width=40)
         self.phone_entry.place(x=220, y=340-35)
 
-        email_label = Label(self.editRenter_window, text="Email", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
+        email_label = Label(self.editRenter_window, text="Email", font=("Segoe UI", 12, "bold"), bg="#FCC000")
         email_label.place(x=220, y=370-35)
         self.email_entry = Entry(self.editRenter_window, font=("Segoe UI", 12), width=40)
         self.email_entry.place(x=220, y=400-35)
 
-        save_button = Button(self.editRenter_window, text="SAVE", font=("Segoe UI", 12, "bold"), width=12)
+        save_button = Button(self.editRenter_window, text="SAVE", font=("Segoe UI", 12, "bold"), width=12,
+                             bg="#FFC000", fg="#800000")
         save_button.configure(command=self.save)
         save_button.place(x=329, y=530)
 
-        cancel_button = Button(self.editRenter_window, text="CANCEL", font=("Segoe UI", 12, "bold"), width=12)
+        cancel_button = Button(self.editRenter_window, text="CANCEL", font=("Segoe UI", 12, "bold"), width=12,
+                               bg="#FFC000", fg="#800000")
         cancel_button.configure(command=self.cancel)
         cancel_button.place(x=462, y=530)
 
@@ -129,9 +131,15 @@ class EditRenterInterface:
         # Up to here -- checking and taking information
 
         if isLastNameValid and isFirstNameValid:
-            if isEmailValid or isPhoneValid:
-                self.insert_renter()
-
+            if self.phone_entry.get() != "" and not isPhoneValid:
+                messagebox.showwarning("Invalid input", "Entered details in Phone Number is not valid. Please remove"
+                                       " or update it and try again.", parent=self.editRenter_window)
+            elif self.email_entry.get() != "" and not isEmailValid:
+                messagebox.showwarning("Invalid input", "Entered details in Email is not valid. Please remove"
+                                       " or update it and try again.", parent=self.editRenter_window)
+            elif isEmailValid or isPhoneValid:
+                self.update_renter()
+                messagebox.showinfo("Success", "Renter's Details updated successfully.", parent=self.editRenter_window)
                 self.editRenter_window.destroy()
             else:
                 messagebox.showwarning("Fields Required", "At least one of the two is needed to proceed: Phone Number or Email",
@@ -143,7 +151,7 @@ class EditRenterInterface:
     def cancel(self):
         self.editRenter_window.destroy()
 
-    def insert_renter(self):
+    def update_renter(self):
         db = sqlite3.connect('BOOK RENTAL.db')
         script = db.cursor()
 
@@ -160,7 +168,9 @@ class EditRenterInterface:
 
 def main():
     sample = [45, 15, 'The Brothers Karmazov', 'Cao, Rohnel Angelo A.', '2023-07-24', '2023-08-02']
-    EditRenterInterface(None, sample)
+    main_window = Tk()
+    EditRenterInterface(main_window, sample)
+    main_window.mainloop()
 
 
 if __name__ == "__main__":

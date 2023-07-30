@@ -7,6 +7,7 @@ import _tkinter
 
 import checker
 import late_menu
+import background
 
 
 class ReturnBookInterface:
@@ -35,35 +36,48 @@ class ReturnBookInterface:
 
     def set_interface(self):
         # Header
-        main_header = Label(self.return_window, text="RETURN A BOOK", font=("Segoe UI", 20, "bold"), bg="#f2eecb")
-        main_header.place(x=300, y=100)
+        main_header = Canvas(self.return_window)
+        main_header.create_image(0, 0, image=background.Background.return_bg(self), anchor=NW)
+        main_header.create_image(340, 40, image=background.Background.logo(self), anchor=NW)
+        main_header.create_text(393, 183, text="RETURN A BOOK", fill="#FFC000",
+                                font=("Segoe UI", 20, "bold"))
+        main_header.create_text(390, 180, text="RETURN A BOOK", fill="#800000",
+                                font=("Segoe UI", 20, "bold"))
+
+        main_header.pack(fill="both", expand=True)
 
         # Entryboxes
-        lastname_label = Label(self.return_window, text="Last Name", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
-        lastname_label.place(x=220, y=250 - 35)
-        self.lastname_entry = Entry(self.return_window, font=("Segoe UI", 12), width=16)
+        main_header.create_image(220, 213, image=background.Background.lastname_bg(self), anchor=NW)
+        main_header.create_text(262, 225, text="    Last Name", fill="#800000",
+                                font=("Segoe UI", 12, "bold"))
+        self.lastname_entry = Entry(self.return_window, font=("Segoe UI", 12), width=16, bg="#FFC000")
         self.lastname_entry.place(x=220, y=280 - 35)
 
-        firstname_label = Label(self.return_window, text="First Name", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
-        firstname_label.place(x=370, y=250 - 35)
-        self.firstname_entry = Entry(self.return_window, font=("Segoe UI", 12), width=18)
+        main_header.create_image(369, 213, image=background.Background.firstname_bg(self), anchor=NW)
+        main_header.create_text(411, 225, text="    First Name", fill="#800000",
+                                font=("Segoe UI", 12, "bold"))
+        self.firstname_entry = Entry(self.return_window, font=("Segoe UI", 12), width=18, bg="#FFC000")
         self.firstname_entry.place(x=368, y=280 - 35)
 
-        middleinitial_label = Label(self.return_window, text="M.I.", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
-        middleinitial_label.place(x=534, y=250 - 35)
-        self.middleinitial_entry = Entry(self.return_window, font=("Segoe UI", 12), width=5)
+        main_header.create_image(534, 213, image=background.Background.miname_bg(self), anchor=NW)
+        main_header.create_text(544, 225, text="    M.I.", fill="#800000",
+                                font=("Segoe UI", 12, "bold"))
+        self.middleinitial_entry = Entry(self.return_window, font=("Segoe UI", 12), width=5, bg="#FFC000")
         self.middleinitial_entry.place(x=534, y=280 - 35)
 
-        book_label = Label(self.return_window, text="Book ID", font=("Segoe UI", 12, "bold"), bg="#f2eecb")
-        book_label.place(x=220, y=310 - 35)
-        self.book_entry = Entry(self.return_window, font=("Segoe UI", 12), width=40)
+        main_header.create_image(220, 273, image=background.Background.bookid_bg(self), anchor=NW)
+        main_header.create_text(252, 285, text="    Book ID", fill="#800000",
+                                font=("Segoe UI", 12, "bold"))
+        self.book_entry = Entry(self.return_window, font=("Segoe UI", 12), width=40, bg="#FFC000")
         self.book_entry.place(x=220, y=340 - 35)
 
-        save_button = Button(self.return_window, text="SAVE", font=("Segoe UI", 12, "bold"), width=12)
+        save_button = Button(self.return_window, text="SAVE", bg="#FFC000", fg="#800000", font=("Segoe UI", 12, "bold"),
+                             image=background.Background.save_ico(self), compound='left', width=120, height=29)
         save_button.configure(command=self.save)
         save_button.place(x=329, y=530)
 
-        cancel_button = Button(self.return_window, text="CANCEL", font=("Segoe UI", 12, "bold"), width=12)
+        cancel_button = Button(self.return_window, text="CANCEL", bg="#FFC000", fg="#800000", font=("Segoe UI", 12, "bold"),
+                               image=background.Background.cancel_ico(self), compound='left', width=120, height=29)
         cancel_button.configure(command=self.cancel)
         cancel_button.place(x=462, y=530)
 

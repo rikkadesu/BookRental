@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="Used json file to save fee settings">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BOOK RENTAL.db" beforeDir="false" afterPath="$PROJECT_DIR$/BOOK RENTAL.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/remove_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/remove_menu.py" afterDir="false" />
+    <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="Added checkbox to show completed records and optimized codes">
+      <change beforePath="$PROJECT_DIR$/../../../../Book Rental Management System/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Book Rental Management System/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Book Rental Management System/checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Book Rental Management System/checker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../Book Rental Management System/rent_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Book Rental Management System/rent_menu.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +22,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -36,7 +35,9 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/School/PUP/BSIT 1-2/2nd Year/2nd Sem/Information Management/Project/BookRental/BookRental-withJSON/BookRental-withJSON/BookRental-main/Book Rental Management System&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
   }
 }</component>
   <component name="RunManager">
@@ -90,14 +91,7 @@
       <option name="project" value="LOCAL" />
       <updated>1690520415047</updated>
     </task>
-    <task id="LOCAL-00003" summary="Used json file to save fee settings">
-      <created>1690544982199</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1690544982199</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -114,18 +108,6 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated removal of admin table and optimized sorting of books" />
     <MESSAGE value="Added checkbox to show completed records and optimized codes" />
-    <MESSAGE value="Used json file to save fee settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="Used json file to save fee settings" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/return_menu.py</url>
-          <line>175</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <option name="LAST_COMMIT_MESSAGE" value="Added checkbox to show completed records and optimized codes" />
   </component>
 </project>
