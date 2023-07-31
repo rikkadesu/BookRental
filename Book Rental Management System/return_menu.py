@@ -33,6 +33,7 @@ class ReturnBookInterface:
 
         self.set_interface()
         self.do_initialize() if self.initialize else None
+        self.return_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
         # Header

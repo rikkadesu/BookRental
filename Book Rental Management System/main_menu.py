@@ -13,8 +13,8 @@ import background
 
 
 class BookRentalSystem:
-    def __init__(self, window):
-        self.main_window = window
+    def __init__(self):
+        self.main_window = Tk()
         self.rent_fee = self.late_fee = None
 
         self.main_window.title("Book Rental Mangement System")
@@ -33,6 +33,8 @@ class BookRentalSystem:
         # Initializes the database
         self.init_db()
         self.init_settings()
+        self.main_window.iconbitmap('img/icon/app_icon.ico')
+        self.main_window.mainloop()
 
     def set_interface(self):
         # Header
@@ -167,10 +169,7 @@ class BookRentalSystem:
 
 
 def main():
-    main_window = Tk()
-    BookRentalSystem(main_window)
-
-    main_window.mainloop()
+    BookRentalSystem()
 
 
 if __name__ == "__main__":

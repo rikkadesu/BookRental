@@ -22,11 +22,13 @@ class RemoveBookInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.remove_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
         # Header
         main_header = Canvas(self.remove_window)
         main_header.create_image(0, 0, image=background.Background.add_bg(self), anchor=NW)
+        main_header.create_image(240, 43, image=background.Background.smudge_bg(self), anchor=NW)
         main_header.create_text(390, 123, text="REMOVE A BOOK", fill="#FFC000",
                                 font=("Segoe UI", 20, "bold"))
         main_header.create_text(387, 120, text="REMOVE A BOOK", fill="#800000",

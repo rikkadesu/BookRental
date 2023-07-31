@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import sqlite3
 
+import background
 import checker
 
 
@@ -30,11 +31,19 @@ class EditRenterInterface:
 
         self.set_interface()
         self.get_renterDetails()
+        self.editRenter_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
         # Header
-        main_header = Label(self.editRenter_window, text="EDIT RENTER", font=("Segoe UI", 20, "bold"), bg="#FCC000")
-        main_header.place(x=300, y=100)
+        main_header = Canvas(self.editRenter_window)
+        main_header.create_image(0, 0, image=background.Background.edit_bg(self), anchor=NW)
+        main_header.create_image(240, 43, image=background.Background.smudge_bg(self), anchor=NW)
+        main_header.create_text(393, 123, text="EDIT RENTER", fill="#FFC000",
+                                font=("Segoe UI", 20, "bold"))
+        main_header.create_text(390, 120, text="EDIT RENTER", fill="#800000",
+                                font=("Segoe UI", 20, "bold"))
+
+        main_header.pack(fill="both", expand=True)
 
         # Entryboxes
         lastname_label = Label(self.editRenter_window, text="Last Name", font=("Segoe UI", 12, "bold"), bg="#FCC000")

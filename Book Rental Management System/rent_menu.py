@@ -30,6 +30,7 @@ class RentBookInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.rent_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
         # Header

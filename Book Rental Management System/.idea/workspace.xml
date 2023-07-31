@@ -4,10 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="Added checkbox to show completed records and optimized codes">
-      <change beforePath="$PROJECT_DIR$/../../../../Book Rental Management System/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Book Rental Management System/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Book Rental Management System/checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Book Rental Management System/checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Book Rental Management System/rent_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Book Rental Management System/rent_menu.py" afterDir="false" />
+    <list default="true" id="bd3fc9d8-9ed0-4231-b540-eba370240641" name="Changes" comment="Version 1.0.0">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BOOK RENTAL.db" beforeDir="false" afterPath="$PROJECT_DIR$/BOOK RENTAL.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/add_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/add_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/background.py" beforeDir="false" afterPath="$PROJECT_DIR$/background.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/book_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/book_list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editRenter_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/editRenter_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/late_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/late_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/payment_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/remove_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/remove_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rent_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/rent_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/return_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/return_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schedule_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/schedule_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings_menu.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +33,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -91,7 +102,28 @@
       <option name="project" value="LOCAL" />
       <updated>1690520415047</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Version 1.0.0">
+      <created>1690708272480</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1690708272480</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Version 1.0.0">
+      <created>1690708353891</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1690708353891</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Version 1.0.0">
+      <created>1690708378419</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1690708378419</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -108,6 +140,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated removal of admin table and optimized sorting of books" />
     <MESSAGE value="Added checkbox to show completed records and optimized codes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added checkbox to show completed records and optimized codes" />
+    <MESSAGE value="Version 1.0.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="Version 1.0.0" />
   </component>
 </project>

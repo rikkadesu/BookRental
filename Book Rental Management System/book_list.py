@@ -22,6 +22,7 @@ class BookListInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.bookList_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
         # Header

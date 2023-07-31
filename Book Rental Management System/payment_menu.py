@@ -31,6 +31,7 @@ class PaymentInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.payment_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
         # Header

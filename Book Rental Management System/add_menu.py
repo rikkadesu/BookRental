@@ -24,11 +24,13 @@ class AddBookInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.add_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
         # Header
         main_header = Canvas(self.add_window)
         main_header.create_image(0, 0, image=background.Background.add_bg(self), anchor=NW)
+        main_header.create_image(240, 43, image=background.Background.smudge_bg(self), anchor=NW)
         main_header.create_text(390, 123, text="ADD A BOOK", fill="#FFC000",
                                 font=("Segoe UI", 20, "bold"))
         main_header.create_text(387, 120, text="ADD A BOOK", fill="#800000",

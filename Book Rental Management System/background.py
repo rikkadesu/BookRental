@@ -151,7 +151,29 @@ class Background:
         self.bookquantity_photo = ImageTk.PhotoImage(bookquantity_image)
         return self.bookquantity_photo
 
-    # Icons below
+    @staticmethod
+    def edit_bg(self):
+        edit_bg_image = Image.open("img/Library3.jpg")
+        edit_bg_image = edit_bg_image.resize((800, 600))
+        edit_bg_image = edit_bg_image.filter(ImageFilter.BLUR)
+        self.edit_bg_photo = ImageTk.PhotoImage(edit_bg_image)
+        return self.edit_bg_photo
+
+    # Icons below ===============================================================
+    @staticmethod
+    def logo_small(self):
+        logo_image = Image.open("img/PUPLogo.png")
+        logo_image = logo_image.resize((80, 80))
+        self.logo_photo = ImageTk.PhotoImage(logo_image)
+        return self.logo_photo
+
+    @staticmethod
+    def settings_ico_big(self):
+        settings_image = Image.open("img/icon/gear_icon.png")
+        settings_image = settings_image.resize((40, 40))
+        self.settings_icon = ImageTk.PhotoImage(settings_image)
+        return self.settings_icon
+
     @staticmethod
     def settings_ico(self):
         settings_image = Image.open("img/icon/gear_icon.png")

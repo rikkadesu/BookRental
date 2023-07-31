@@ -2,6 +2,8 @@ from tkinter import messagebox
 from tkinter import *
 import json
 
+import background
+
 
 class SettingsInterface:
     def __init__(self, parent, parent_window):
@@ -22,11 +24,15 @@ class SettingsInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.settings_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
+
+        logo = Label(self.settings_window, image=background.Background.settings_ico_big(self), bg="#FCC000")
+        logo.place(x=120, y=40)
         main_header = Label(self.settings_window, text="SETTINGS", font=("Segoe UI", 17, "bold"),
                             bg="#FCC000", fg="black")
-        main_header.place(x=145, y=50)
+        main_header.place(x=165, y=50)
 
         rent_fee_label = Label(self.settings_window, text="Rent Fee", font=("Segoe UI", 12, "bold"),
                                bg="#FCC000", fg="black")

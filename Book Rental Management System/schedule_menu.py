@@ -31,8 +31,13 @@ class ScheduleInterface:
         # ========== Places the window at the center END ==========
 
         self.set_interface()
+        self.schedule_window.iconbitmap('img/icon/app_icon.ico')
 
     def set_interface(self):
+
+        logo = Label(self.schedule_window, image=background.Background.logo_small(self), bg="#FCC000")
+        logo.place(x=40, y=20)
+
         # Header
         main_header = Label(self.schedule_window, text="RENTED BOOK SCHEDULES", font=("Segoe UI", 20, "bold"))
         main_header.configure(bg="#FCC000")
